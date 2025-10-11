@@ -1,6 +1,4 @@
-// src/app/components/About.tsx
 
-// Define a 'theme' prop for the component to accept colors
 type AboutProps = {
   theme: {
     background: string;

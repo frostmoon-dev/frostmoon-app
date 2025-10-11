@@ -1,20 +1,22 @@
 "use client";
-
+import { useState as useScrambleState, useRef as useScrambleRef } from "react";
 import { useState, useRef } from "react";
+import Image from "next/image"; // Make sure Image is imported
 import { MdEmail } from "react-icons/md";
 import { FaMusic, FaLinkedin, FaGithub } from "react-icons/fa6";
 import { GiHeartStake } from "react-icons/gi";
-import Image from "next/image";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { TextPlugin } from "gsap/TextPlugin";
+import { ScrollTrigger } from "gsap/ScrollTrigger"; // NEW import for ScrollTrigger
+
 
 // Import your shiny new components
 import About from "./components/about";
 import Professional from "./components/professional";
 import Resume from "./components/resume";
 
-gsap.registerPlugin(useGSAP, TextPlugin);
+gsap.registerPlugin(useGSAP, TextPlugin, ScrollTrigger); // Register ScrollTrigger here!
 
 const kanaoTheme = {
   background: "#2E294E",
@@ -109,7 +111,51 @@ type Skill = { name: string; percentage: number };
 type Experience = { title: string; company: string; period: string; description: string };
 type Education = { title: string; school: string; period: string; description: string };
 
-// --- MODIFIED HOME COMPONENT WITH SLIDE-IN ANIMATION ---
+function ScrambleText({ text, className = "" }: { text: string; className?: string }) {
+  const [display, setDisplay] = useScrambleState(text);
+  const intervalRef = useScrambleRef<NodeJS.Timeout | null>(null);
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=<>?";
+
+  function scramble(original: string) {
+    return original
+      .split("")
+      .map((c) => (c === " " ? " " : chars[Math.floor(Math.random() * chars.length)]))
+      .join("");
+  }
+
+  function handleMouseEnter() {
+    let frame = 0;
+    const maxFrames = 12;
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      if (frame < maxFrames) {
+        setDisplay((prev) => scramble(text));
+        frame++;
+      } else {
+        setDisplay(text);
+        if (intervalRef.current) clearInterval(intervalRef.current);
+      }
+    }, 24);
+  }
+
+  function handleMouseLeave() {
+    setDisplay(text);
+    if (intervalRef.current) clearInterval(intervalRef.current);
+  }
+
+  return (
+    <span
+      className={className}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      style={{ display: "inline-block", transition: "color 0.2s" }}
+    >
+      {display}
+    </span>
+  );
+}
+
+// --- MODIFIED HOME COMPONENT WITH SLIDE-IN AND SCROLL ANIMATION ---
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("about");
@@ -120,6 +166,7 @@ export default function Home() {
 
   useGSAP(() => {
     if (!loading) {
+      // Initial page load animation
       const tl = gsap.timeline();
       tl.from(sidebarRef.current, { 
         x: -50, 
@@ -133,6 +180,17 @@ export default function Home() {
         duration: 0.8, 
         ease: "power3.out" 
       }, "-=0.6");
+
+      // ScrollTrigger animation for the peeking character
+      gsap.to("#peeker-character img", {
+        left: '0px',
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: mainContentRef.current,
+          start: "top center",
+          scrub: 1,
+        }
+      });
     }
   }, { scope: containerRef, dependencies: [loading] });
 
@@ -186,92 +244,92 @@ export default function Home() {
   return (
     <div
       ref={containerRef}
-      className="min-h-screen p-4 sm:p-6 md:p-8"
+      className="min-h-screen p-4 sm:p-6 md:p-8 relative overflow-hidden" // Added 'relative' and 'overflow-hidden'
       style={{ backgroundColor: kanaoTheme.background }}
     >
+  
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-      {/* Sidebar */}
-<div
-  ref={sidebarRef}
-  className="md:col-span-1 p-6 rounded-lg h-fit"
-  style={{ backgroundColor: `${kanaoTheme.accent}15` }}
->
-  {/* The main changes are in this div below */}
-  <div className="flex flex-col items-center gap-6">
-    <div className="w-32 h-32 rounded-full overflow-hidden relative">
-      <Image src="/ellen.png" alt="Profile" fill style={{ objectFit: 'cover' }} />
-    </div>
-    <div>
-      <h1
-        className="text-2xl font-bold text-center"
-        style={{ color: kanaoTheme.accentLight }}
-      >
-        Shiru
-      </h1>
-      <p
-        className="text-sm text-center"
-        style={{ color: kanaoTheme.accent }}
-      >
-        Software Developer
-      </p>
-    </div>
-    <div className="w-full space-y-4">
-      <div className="flex items-start gap-3">
-        <MdEmail
-          size={20}
-          style={{ color: kanaoTheme.highlight, marginTop: "2px" }}
-        />
-        <div>
-          <p className="text-xs uppercase" style={{ color: kanaoTheme.accent }}>Email</p>
-          <p className="text-sm" style={{ color: kanaoTheme.accentLight }}>frostmoondev@gmail.com</p>
+        {/* Sidebar */}
+        <div
+          ref={sidebarRef}
+          className="md:col-span-1 p-6 rounded-lg h-fit"
+          style={{ backgroundColor: `${kanaoTheme.accent}15` }}
+        >
+          <div className="flex flex-col items-center gap-6">
+            <div className="w-32 h-32 rounded-full overflow-hidden relative">
+              <Image src="/kanao.png" alt="Profile" fill style={{ objectFit: 'cover' }} />
+            </div>
+            <div>
+              <h1
+                className="text-xl font-bold text-center"
+                style={{ color: kanaoTheme.accentLight }}
+              >
+                Shiru
+              </h1>
+              <p
+                className="text-sm text-center"
+                style={{ color: kanaoTheme.accent }}
+              >
+                Software Developer
+              </p>
+            </div>
+            <div className="w-full space-y-4">
+              <div className="flex items-start gap-3">
+                <MdEmail
+                  size={20}
+                  style={{ color: kanaoTheme.highlight, marginTop: "2px" }}
+                />
+                <div>
+                  <p className="text-xs uppercase" style={{ color: kanaoTheme.accent }}>Email</p>
+                  <p className="text-sm" style={{ color: kanaoTheme.accentLight }}>frostmoondev@gmail.com</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <FaGithub
+                  size={20}
+                  style={{ color: kanaoTheme.highlight, marginTop: "2px" }}
+                />
+                <div>
+                  <p className="text-xs uppercase" style={{ color: kanaoTheme.accent }}>GitHub</p>
+                  <p className="text-sm" style={{ color: kanaoTheme.accentLight }}>frostmoon-dev</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <GiHeartStake
+                  size={20}
+                  style={{ color: kanaoTheme.highlight, marginTop: "2px" }}
+                />
+                <div>
+                  <p className="text-xs uppercase" style={{ color: kanaoTheme.accent }}>Fav Language</p>
+                  <p className="text-sm" style={{ color: kanaoTheme.accentLight }}>X++</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <FaMusic
+                  size={20}
+                  style={{ color: kanaoTheme.highlight, marginTop: "2px" }}
+                />
+                <div>
+                  <p className="text-xs uppercase" style={{ color: kanaoTheme.accent }}>Currently Listening To:</p>
+                  <p className="text-sm" style={{ color: kanaoTheme.accentLight }}>The sweet sounds of code compiling~</p>
+                </div>
+              </div>
+            </div>
+            <div className="flex gap-4 w-full justify-center pt-4">
+              <a href="https://github.com/frostmoon-dev" target="_blank" rel="noopener noreferrer">
+                <FaGithub size={20} style={{ color: kanaoTheme.accent }} />
+              </a>
+              <a href="https://linkedin.com/in/fatihahmuhd/" target="_blank" rel="noopener noreferrer">
+                <FaLinkedin size={20} style={{ color: kanaoTheme.accent }} />
+              </a>
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="flex items-start gap-3">
-        <FaGithub
-          size={20}
-          style={{ color: kanaoTheme.highlight, marginTop: "2px" }}
-        />
-        <div>
-          <p className="text-xs uppercase" style={{ color: kanaoTheme.accent }}>GitHub</p>
-          <p className="text-sm" style={{ color: kanaoTheme.accentLight }}>frostmoon-dev</p>
-        </div>
-      </div>
-      <div className="flex items-start gap-3">
-        <GiHeartStake
-          size={20}
-          style={{ color: kanaoTheme.highlight, marginTop: "2px" }}
-        />
-        <div>
-          <p className="text-xs uppercase" style={{ color: kanaoTheme.accent }}>Fav Language</p>
-          <p className="text-sm" style={{ color: kanaoTheme.accentLight }}>X++</p>
-        </div>
-      </div>
-      <div className="flex items-start gap-3">
-        <FaMusic
-          size={20}
-          style={{ color: kanaoTheme.highlight, marginTop: "2px" }}
-        />
-        <div>
-          <p className="text-xs uppercase" style={{ color: kanaoTheme.accent }}>Currently Listening To:</p>
-          <p className="text-sm" style={{ color: kanaoTheme.accentLight }}>The sweet sounds of code compiling~</p>
-        </div>
-      </div>
-    </div>
-    <div className="flex gap-4 w-full justify-center pt-4">
-      <a href="https://github.com/frostmoon-dev" target="_blank" rel="noopener noreferrer">
-        <FaGithub size={20} style={{ color: kanaoTheme.accent }} />
-      </a>
-      <a href="https://linkedin.com/in/fatihahmuhd/" target="_blank" rel="noopener noreferrer">
-        <FaLinkedin size={20} style={{ color: kanaoTheme.accent }} />
-      </a>
-    </div>
-  </div>
-</div>
 
         {/* Main Content */}
         <div ref={mainContentRef} className="md:col-span-3">
           <div
-            className="flex gap-8 mb-8 pb-4 border-b"
+            className="flex gap-8 mb-8 pb-4 border-b justify-center"
             style={{ borderColor: `${kanaoTheme.accent}30` }}
           >
             <button
@@ -282,7 +340,7 @@ export default function Home() {
                 borderColor: activeTab === "about" ? kanaoTheme.highlight : "transparent",
               }}
             >
-              About
+              <ScrambleText text="About" />
             </button>
             <button
               onClick={() => setActiveTab("professional")}
@@ -292,7 +350,7 @@ export default function Home() {
                 borderColor: activeTab === "professional" ? kanaoTheme.highlight : "transparent",
               }}
             >
-              Professional
+              <ScrambleText text="Professional" />
             </button>
             <button
               onClick={() => setActiveTab("resume")}
@@ -302,7 +360,7 @@ export default function Home() {
                 borderColor: activeTab === "resume" ? kanaoTheme.highlight : "transparent",
               }}
             >
-              Resume
+              <ScrambleText text="Resume" />
             </button>
           </div>
 

@@ -1,5 +1,3 @@
-// src/app/components/Professional.tsx
-
 type ProfessionalProps = {
   theme: {
     background: string;
