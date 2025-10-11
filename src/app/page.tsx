@@ -2,8 +2,9 @@
 
 import { useState, useRef } from "react";
 import { MdEmail } from "react-icons/md";
-import { FaMusic, FaGithub, FaLinkedin } from "react-icons/fa6";
+import { FaMusic, FaLinkedin, FaGithub } from "react-icons/fa6";
 import { GiHeartStake } from "react-icons/gi";
+import Image from "next/image";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { TextPlugin } from "gsap/TextPlugin";
@@ -22,14 +23,25 @@ const kanaoTheme = {
   highlight: "#FFB6C1",
 };
 
+// --- MODIFIED BBPRELOADER WITH SKIP FUNCTIONALITY ---
 function BBPreloader({ onComplete }: { onComplete: () => void }) {
   const containerRef = useRef(null);
   const textRef = useRef(null);
   const progressRef = useRef(null);
+  const timeline = useRef<gsap.core.Timeline | null>(null);
+
+  const handleSkip = () => {
+    timeline.current?.kill();
+    gsap.to(containerRef.current, {
+      opacity: 0,
+      duration: 0.5,
+      onComplete: onComplete,
+    });
+  };
 
   useGSAP(
     () => {
-      const tl = gsap.timeline({
+      timeline.current = gsap.timeline({
         onComplete: () => {
           gsap.to(containerRef.current, {
             opacity: 0,
@@ -42,53 +54,20 @@ function BBPreloader({ onComplete }: { onComplete: () => void }) {
       const loadingTexts = [
         "Accessing site...",
         "Bypassing Firewalls...",
-        "Injecting flowers...", 
+        "Injecting flowers...",
         "Welcome to my portfolio...",
       ];
+      
+      const tl = timeline.current;
 
-      tl.to(progressRef.current, {
-        width: "25%",
-        duration: 1.5,
-        ease: "power2.inOut",
-      });
-      tl.to(textRef.current, {
-        duration: 1.5,
-        text: loadingTexts[0],
-        ease: "none",
-      });
-
-      tl.to(progressRef.current, {
-        width: "50%",
-        duration: 1.5,
-        ease: "power2.inOut",
-      });
-      tl.to(textRef.current, {
-        duration: 1.5,
-        text: loadingTexts[1],
-        ease: "none",
-      });
-
-      tl.to(progressRef.current, {
-        width: "75%",
-        duration: 1.5,
-        ease: "power2.inOut",
-      });
-      tl.to(textRef.current, {
-        duration: 1.5,
-        text: loadingTexts[2],
-        ease: "none",
-      });
-
-      tl.to(progressRef.current, {
-        width: "100%",
-        duration: 1,
-        ease: "power2.inOut",
-      });
-      tl.to(textRef.current, {
-        duration: 1,
-        text: loadingTexts[3],
-        ease: "none",
-      });
+      tl.to(progressRef.current, { width: "25%", duration: 1.5, ease: "power2.inOut" });
+      tl.to(textRef.current, { duration: 1.5, text: loadingTexts[0], ease: "none" }, "<");
+      tl.to(progressRef.current, { width: "50%", duration: 1.5, ease: "power2.inOut" });
+      tl.to(textRef.current, { duration: 1.5, text: loadingTexts[1], ease: "none" }, "<");
+      tl.to(progressRef.current, { width: "75%", duration: 1.5, ease: "power2.inOut" });
+      tl.to(textRef.current, { duration: 1.5, text: loadingTexts[2], ease: "none" }, "<");
+      tl.to(progressRef.current, { width: "100%", duration: 1, ease: "power2.inOut" });
+      tl.to(textRef.current, { duration: 1, text: loadingTexts[3], ease: "none" }, "<");
     },
     { scope: containerRef }
   );
@@ -96,14 +75,15 @@ function BBPreloader({ onComplete }: { onComplete: () => void }) {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center cursor-pointer"
       style={{ backgroundColor: kanaoTheme.background }}
+      onClick={handleSkip}
     >
       <div
         className="w-24 h-24 mb-8 rounded-full overflow-hidden flex items-center justify-center"
         style={{ backgroundColor: kanaoTheme.accent }}
       >
-        <FaGithub size={60} style={{ color: kanaoTheme.background }} />
+        <Image src="/kanao.png" alt="kanao" width={96} height={96} priority />
       </div>
       <p
         ref={textRef}
@@ -120,24 +100,46 @@ function BBPreloader({ onComplete }: { onComplete: () => void }) {
           style={{ width: "0%", backgroundColor: kanaoTheme.accent }}
         />
       </div>
+      <p className="text-xs mt-8" style={{ color: `${kanaoTheme.accent}80` }}>Click anywhere to skip</p>
     </div>
   );
 }
 
-// Define types for your data
 type Skill = { name: string; percentage: number };
 type Experience = { title: string; company: string; period: string; description: string };
 type Education = { title: string; school: string; period: string; description: string };
 
+// --- MODIFIED HOME COMPONENT WITH SLIDE-IN ANIMATION ---
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("about");
+
+  const containerRef = useRef(null);
+  const sidebarRef = useRef(null);
+  const mainContentRef = useRef(null);
+
+  useGSAP(() => {
+    if (!loading) {
+      const tl = gsap.timeline();
+      tl.from(sidebarRef.current, { 
+        x: -50, 
+        opacity: 0, 
+        duration: 0.8, 
+        ease: "power3.out" 
+      });
+      tl.from(mainContentRef.current, { 
+        y: 50, 
+        opacity: 0, 
+        duration: 0.8, 
+        ease: "power3.out" 
+      }, "-=0.6");
+    }
+  }, { scope: containerRef, dependencies: [loading] });
 
   if (loading) {
     return <BBPreloader onComplete={() => setLoading(false)} />;
   }
   
-  // Your data stays here in the main component
   const skills: Skill[] = [
     { name: "D365 F&O Development (X++)", percentage: 95 },
     { name: "SSRS Report Development", percentage: 90 },
@@ -183,150 +185,98 @@ export default function Home() {
 
   return (
     <div
+      ref={containerRef}
       className="min-h-screen p-4 sm:p-6 md:p-8"
       style={{ backgroundColor: kanaoTheme.background }}
     >
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-        {/* Sidebar */}
-        <div
-          className="md:col-span-1 p-6 rounded-lg h-fit"
-          style={{ backgroundColor: `${kanaoTheme.accent}15` }}
-        >
-          <div className="flex flex-col items-center md:items-start gap-6">
-            <div className="w-32 h-32 mx-auto md:mx-0 rounded-lg overflow-hidden">
-              <div
-                className="w-full h-full flex items-center justify-center"
-                style={{ backgroundColor: kanaoTheme.accent }}
-              >
-                <span style={{ color: kanaoTheme.background }}>Profile</span>
-              </div>
-            </div>
-
-            <div>
-              <h1
-                className="text-2xl font-bold text-center md:text-left"
-                style={{ color: kanaoTheme.accentLight }}
-              >
-                Shiru
-              </h1>
-              <p
-                className="text-sm text-center md:text-left"
-                style={{ color: kanaoTheme.accent }}
-              >
-                Software Developer
-              </p>
-            </div>
-
-            <div className="w-full space-y-4">
-              <div className="flex items-start gap-3">
-                <MdEmail
-                  size={20}
-                  style={{ color: kanaoTheme.highlight, marginTop: "2px" }}
-                />
-                <div>
-                  <p
-                    className="text-xs uppercase"
-                    style={{ color: kanaoTheme.accent }}
-                  >
-                    Email
-                  </p>
-                  <p
-                    className="text-sm"
-                    style={{ color: kanaoTheme.accentLight }}
-                  >
-                    frostmoondev@gmail.com
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <FaGithub
-                  size={20}
-                  style={{ color: kanaoTheme.highlight, marginTop: "2px" }}
-                />
-                <div>
-                  <p
-                    className="text-xs uppercase"
-                    style={{ color: kanaoTheme.accent }}
-                  >
-                    GitHub
-                  </p>
-                  <p
-                    className="text-sm"
-                    style={{ color: kanaoTheme.accentLight }}
-                  >
-                    frostmoon-dev
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <GiHeartStake
-                  size={20}
-                  style={{ color: kanaoTheme.highlight, marginTop: "2px" }}
-                />
-                <div>
-                  <p
-                    className="text-xs uppercase"
-                    style={{ color: kanaoTheme.accent }}
-                  >
-                    Fav Language
-                  </p>
-                  <p
-                    className="text-sm"
-                    style={{ color: kanaoTheme.accentLight }}
-                  >
-                    X++
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <FaMusic
-                  size={20}
-                  style={{ color: kanaoTheme.highlight, marginTop: "2px" }}
-                />
-                <div>
-                  <p
-                    className="text-xs uppercase"
-                    style={{ color: kanaoTheme.accent }}
-                  >
-                    Currently Listening To:
-                  </p>
-                  <p
-                    className="text-sm"
-                    style={{ color: kanaoTheme.accentLight }}
-                  >
-                    The sweet sounds of code compiling~
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex gap-4 w-full justify-center md:justify-start pt-4">
-              <a href="https://github.com/frostmoon-dev" target="_blank" rel="noopener noreferrer">
-                <FaGithub size={20} style={{ color: kanaoTheme.accent }} />
-              </a>
-              <a href="https://linkedin.com/in/fatihahmuhd/" target="_blank" rel="noopener noreferrer">
-                <FaLinkedin size={20} style={{ color: kanaoTheme.accent }} />
-              </a>
-            </div>
-          </div>
+      {/* Sidebar */}
+<div
+  ref={sidebarRef}
+  className="md:col-span-1 p-6 rounded-lg h-fit"
+  style={{ backgroundColor: `${kanaoTheme.accent}15` }}
+>
+  {/* The main changes are in this div below */}
+  <div className="flex flex-col items-center gap-6">
+    <div className="w-32 h-32 rounded-full overflow-hidden relative">
+      <Image src="/ellen.png" alt="Profile" fill style={{ objectFit: 'cover' }} />
+    </div>
+    <div>
+      <h1
+        className="text-2xl font-bold text-center"
+        style={{ color: kanaoTheme.accentLight }}
+      >
+        Shiru
+      </h1>
+      <p
+        className="text-sm text-center"
+        style={{ color: kanaoTheme.accent }}
+      >
+        Software Developer
+      </p>
+    </div>
+    <div className="w-full space-y-4">
+      <div className="flex items-start gap-3">
+        <MdEmail
+          size={20}
+          style={{ color: kanaoTheme.highlight, marginTop: "2px" }}
+        />
+        <div>
+          <p className="text-xs uppercase" style={{ color: kanaoTheme.accent }}>Email</p>
+          <p className="text-sm" style={{ color: kanaoTheme.accentLight }}>frostmoondev@gmail.com</p>
         </div>
+      </div>
+      <div className="flex items-start gap-3">
+        <FaGithub
+          size={20}
+          style={{ color: kanaoTheme.highlight, marginTop: "2px" }}
+        />
+        <div>
+          <p className="text-xs uppercase" style={{ color: kanaoTheme.accent }}>GitHub</p>
+          <p className="text-sm" style={{ color: kanaoTheme.accentLight }}>frostmoon-dev</p>
+        </div>
+      </div>
+      <div className="flex items-start gap-3">
+        <GiHeartStake
+          size={20}
+          style={{ color: kanaoTheme.highlight, marginTop: "2px" }}
+        />
+        <div>
+          <p className="text-xs uppercase" style={{ color: kanaoTheme.accent }}>Fav Language</p>
+          <p className="text-sm" style={{ color: kanaoTheme.accentLight }}>X++</p>
+        </div>
+      </div>
+      <div className="flex items-start gap-3">
+        <FaMusic
+          size={20}
+          style={{ color: kanaoTheme.highlight, marginTop: "2px" }}
+        />
+        <div>
+          <p className="text-xs uppercase" style={{ color: kanaoTheme.accent }}>Currently Listening To:</p>
+          <p className="text-sm" style={{ color: kanaoTheme.accentLight }}>The sweet sounds of code compiling~</p>
+        </div>
+      </div>
+    </div>
+    <div className="flex gap-4 w-full justify-center pt-4">
+      <a href="https://github.com/frostmoon-dev" target="_blank" rel="noopener noreferrer">
+        <FaGithub size={20} style={{ color: kanaoTheme.accent }} />
+      </a>
+      <a href="https://linkedin.com/in/fatihahmuhd/" target="_blank" rel="noopener noreferrer">
+        <FaLinkedin size={20} style={{ color: kanaoTheme.accent }} />
+      </a>
+    </div>
+  </div>
+</div>
 
         {/* Main Content */}
-        <div className="md:col-span-3">
+        <div ref={mainContentRef} className="md:col-span-3">
           <div
             className="flex gap-8 mb-8 pb-4 border-b"
             style={{ borderColor: `${kanaoTheme.accent}30` }}
           >
             <button
               onClick={() => setActiveTab("about")}
-              className={`text-lg font-semibold pb-2 transition ${
-                activeTab === "about"
-                  ? "border-b-2"
-                  : "border-b-2 border-transparent"
-              }`}
+              className={`text-lg font-semibold pb-2 transition ${activeTab === "about" ? "border-b-2" : "border-b-2 border-transparent"}`}
               style={{
                 color: activeTab === "about" ? kanaoTheme.highlight : kanaoTheme.accent,
                 borderColor: activeTab === "about" ? kanaoTheme.highlight : "transparent",
@@ -336,11 +286,7 @@ export default function Home() {
             </button>
             <button
               onClick={() => setActiveTab("professional")}
-              className={`text-lg font-semibold pb-2 transition ${
-                activeTab === "professional"
-                  ? "border-b-2"
-                  : "border-b-2 border-transparent"
-              }`}
+              className={`text-lg font-semibold pb-2 transition ${activeTab === "professional" ? "border-b-2" : "border-b-2 border-transparent"}`}
               style={{
                 color: activeTab === "professional" ? kanaoTheme.highlight : kanaoTheme.accent,
                 borderColor: activeTab === "professional" ? kanaoTheme.highlight : "transparent",
@@ -350,11 +296,7 @@ export default function Home() {
             </button>
             <button
               onClick={() => setActiveTab("resume")}
-              className={`text-lg font-semibold pb-2 transition ${
-                activeTab === "resume"
-                  ? "border-b-2"
-                  : "border-b-2 border-transparent"
-              }`}
+              className={`text-lg font-semibold pb-2 transition ${activeTab === "resume" ? "border-b-2" : "border-b-2 border-transparent"}`}
               style={{
                 color: activeTab === "resume" ? kanaoTheme.highlight : kanaoTheme.accent,
                 borderColor: activeTab === "resume" ? kanaoTheme.highlight : "transparent",
@@ -364,11 +306,8 @@ export default function Home() {
             </button>
           </div>
 
-          {/* Conditionally render your new components! */}
           {activeTab === "about" && <About theme={kanaoTheme} />}
-          
           {activeTab === "professional" && <Professional theme={kanaoTheme} />}
-
           {activeTab === "resume" && (
             <Resume
               theme={kanaoTheme}
@@ -377,7 +316,6 @@ export default function Home() {
               education={education}
             />
           )}
-
         </div>
       </div>
     </div>

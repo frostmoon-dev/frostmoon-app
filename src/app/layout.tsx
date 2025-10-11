@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Quicksand, Orbitron, Press_Start_2P, Fredoka, Nunito, Pixelify_Sans } from "next/font/google";
 import "./globals.css";
+import Script from 'next/script';
 // import Menu from "@/components/layout/menu/Menu";
 
 const caseQuicksand = Quicksand({
@@ -54,6 +55,10 @@ export default function RootLayout({
         className={`${caseQuicksand.variable} ${caseOrbitron.variable} ${pressStart.variable} ${fredoka.variable} ${nunito.variable} ${pixelify.variable} antialiased`}
       >
         {/* <Menu /> */}
+        <Script
+          strategy="lazyOnload"
+          src="//code.tidio.co/uwxsz6qiplidpo3cjoqwat1sapidgdna.js"
+        />
         {children}
       </body>
     </html>

@@ -21,7 +21,7 @@ export default function About({ theme }: AboutProps) {
           About Me
         </h2>
         <div
-          className="w-16 h-1 rounded"
+          className="w-35 h-1 rounded"
           style={{ backgroundColor: theme.highlight }}
         ></div>
       </div>
