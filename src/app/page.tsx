@@ -42,7 +42,7 @@ function BBPreloader({ onComplete }: { onComplete: () => void }) {
       const loadingTexts = [
         "Accessing site...",
         "Bypassing Firewalls...",
-        "Injecting flowers...",
+        "Injecting flowers...", 
         "Welcome to my portfolio...",
       ];
 
