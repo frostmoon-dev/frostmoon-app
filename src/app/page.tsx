@@ -261,7 +261,7 @@ export default function Home() {
               <h1 className="text-xl font-bold text-center" style={{ color: kanaoTheme.accentLight }}>
                 <ScrambleText text="Taeha" />
               </h1>
-              <p className="text-sm text-center" style={{ color: kanaoTheme.accent }}>Rapie&apos;s Princess</p>
+              <p className="text-sm text-center" style={{ color: kanaoTheme.accent }}>Rapie's Princess</p>
             </motion.div>
             <div className="w-full space-y-4">
               <motion.div className="flex items-start gap-3" whileHover={{ x: 5 }}>
@@ -289,7 +289,7 @@ export default function Home() {
                 <FaMusic size={20} style={{ color: kanaoTheme.highlight, marginTop: "2px" }} />
                 <div>
                   <p className="text-xs uppercase" style={{ color: kanaoTheme.accent }}>Currently Listening To:</p>
-                  <p className="text-sm" style={{ color: kanaoTheme.accentLight }}>Rapie&apos;s racist comments</p>
+                  <p className="text-sm" style={{ color: kanaoTheme.accentLight }}>Rapie's racist comments</p>
                 </div>
               </motion.div>
             </div>
