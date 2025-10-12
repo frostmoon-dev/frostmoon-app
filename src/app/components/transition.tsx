@@ -95,7 +95,7 @@ export default function Transition() {
             <h1 
               className="text-3xl sm:text-3xl font-bold text-fuchsia-500"
             >
-              Y u skip? {cuteCat}
+              I love you Rapie ♥︎
             </h1>
           </div>
         </motion.div>
