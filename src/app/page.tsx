@@ -33,7 +33,6 @@ function FloatingParticles() {
     y: Math.random() * 100,
   }));
 
-   
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
       {particles.map((p) => (
@@ -235,7 +234,7 @@ function BBPreloader({ onComplete }: { onComplete: () => void }) {
       onClick={handleSkip}
     >
       <div className="w-24 h-24 mb-8 rounded-full overflow-hidden flex items-center justify-center" style={{ backgroundColor: kanaoTheme.accent }}>
-        <Image src="/kanao.png" alt="kanao" width={96} height={96} priority />
+        <Image src="/bb.jpg" alt="kanao" width={96} height={96} priority />
       </div>
       <p ref={textRef} className="text-xl h-8 font-orbitron" style={{ color: kanaoTheme.accent }}></p>
       <div className="w-3/4 max-w-lg h-2 mt-4 rounded-full overflow-hidden" style={{ backgroundColor: `${kanaoTheme.accent}20` }}>
@@ -306,7 +305,7 @@ export default function Home() {
         >
           <div className="flex flex-col items-center gap-6">
             <motion.div className="w-32 h-32 rounded-full overflow-hidden relative" animate={{ scale: [1, 1.05, 1] }} transition={{ duration: 3, repeat: Infinity }}>
-              <Image src="/kanao.png" alt="Profile" fill style={{ objectFit: "cover" }} />
+              <Image src="/bb.jpg" alt="Profile" fill style={{ objectFit: "cover" }} />
             </motion.div>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
               <h1 className="text-xl font-bold text-center" style={{ color: kanaoTheme.accentLight }}>
