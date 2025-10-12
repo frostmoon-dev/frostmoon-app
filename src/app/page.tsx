@@ -4,29 +4,25 @@ import Image from "next/image";
 import { MdEmail } from "react-icons/md";
 import { FaMusic, FaLinkedin, FaGithub } from "react-icons/fa6";
 import { GiHeartStake } from "react-icons/gi";
+import { Heart, Moon, MoonIcon, MoonStarIcon } from "lucide-react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { TextPlugin } from "gsap/TextPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "framer-motion";
-
-// Local Component Imports
-import Transition from "./components/transition"; // We need this now!
 import About from "./components/about";
 import Professional from "./components/professional";
 import Resume from "./components/resume";
+import { Moon_Dance } from "next-font/google";
 
 gsap.registerPlugin(useGSAP, TextPlugin, ScrollTrigger);
 
-// Your beautiful theme is restored!
 const kanaoTheme = {
   background: "#2E294E",
   accent: "#D8BFD8",
   accentLight: "#E6E6FA",
   highlight: "#FFB6C1",
 };
-
-// --- HELPER COMPONENTS (FROM YOUR FILE) ---
 
 function FloatingParticles() {
   const particles = Array.from({ length: 15 }, (_, i) => ({
@@ -92,7 +88,7 @@ function CuteCursorFollower() {
       transition={{ type: "tween", duration: 0.1 }}
     >
       <Image
-        src="/bunny.gif"
+        src="/bunny.gif" // <-- your image file in public/
         alt="Cursor Icon"
         width={24}
         height={24}
@@ -119,8 +115,26 @@ function ScrollProgressBar() {
   }, []);
 
   return (
-    <div style={{ position: "fixed", bottom: 0, left: 0, width: "100%", height: "5px", backgroundColor: `${kanaoTheme.accent}30`, zIndex: 100, }} >
-      <div style={{ height: "100%", backgroundColor: kanaoTheme.highlight, width: `${scrollPercentage}%`, boxShadow: `0 0 10px ${kanaoTheme.highlight}`, transition: "width 0.1s linear", }} />
+    <div
+      style={{
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        width: "100%",
+        height: "5px",
+        backgroundColor: `${kanaoTheme.accent}30`,
+        zIndex: 100,
+      }}
+    >
+      <div
+        style={{
+          height: "100%",
+          backgroundColor: kanaoTheme.highlight,
+          width: `${scrollPercentage}%`,
+          boxShadow: `0 0 10px ${kanaoTheme.highlight}`,
+          transition: "width 0.1s linear",
+        }}
+      />
     </div>
   );
 }
@@ -131,7 +145,10 @@ function ScrambleText({ text, className = "" }: { text: string; className?: stri
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=<>?";
 
   const scramble = (original: string) =>
-    original.split("").map((c) => (c === " " ? " " : chars[Math.floor(Math.random() * chars.length)])).join("");
+    original
+      .split("")
+      .map((c) => (c === " " ? " " : chars[Math.floor(Math.random() * chars.length)]))
+      .join("");
 
   const handleMouseEnter = () => {
     let frame = 0;
@@ -154,7 +171,12 @@ function ScrambleText({ text, className = "" }: { text: string; className?: stri
   };
 
   return (
-    <span className={className} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} style={{ display: "inline-block", transition: "color 0.2s" }} >
+    <span
+      className={className}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      style={{ display: "inline-block", transition: "color 0.2s" }}
+    >
       {display}
     </span>
   );
@@ -167,18 +189,31 @@ function BBPreloader({ onComplete }: { onComplete: () => void }) {
   const timeline = useRef<gsap.core.Timeline | null>(null);
 
   const handleSkip = () => {
+    sessionStorage.setItem('preloaderSkipped', 'true'); 
     timeline.current?.kill();
-    gsap.to(containerRef.current, { opacity: 0, duration: 0.5, zIndex: -1, pointerEvents: "none", onComplete });
+    gsap.to(containerRef.current, {
+      opacity: 0,
+      duration: 0.5,
+      zIndex: -1,
+      pointerEvents: "none",
+      onComplete,
+    });
   };
 
   useGSAP(() => {
     timeline.current = gsap.timeline({
       onComplete: () => {
-        gsap.to(containerRef.current, { opacity: 0, duration: 0.8, zIndex: -1, pointerEvents: "none", onComplete });
+        gsap.to(containerRef.current, {
+          opacity: 0,
+          duration: 0.8,
+          zIndex: -1,
+          pointerEvents: "none",
+          onComplete,
+        });
       },
     });
 
-    const loadingTexts = ["Accessing site...", "Bypassing Firewalls...", "Injecting poison...", "Welcome.."];
+    const loadingTexts = ["Accessing site...", "Bypassing Firewalls...", "Injecting flowers...", "Welcome to my portfolio..."];
     const tl = timeline.current;
 
     tl.to(progressRef.current, { width: "25%", duration: 1.5, ease: "power2.inOut" });
@@ -192,7 +227,12 @@ function BBPreloader({ onComplete }: { onComplete: () => void }) {
   }, { scope: containerRef });
 
   return (
-    <div ref={containerRef} className="fixed inset-0 z-50 flex flex-col items-center justify-center cursor-pointer" style={{ backgroundColor: kanaoTheme.background }} onClick={handleSkip} >
+    <div
+      ref={containerRef}
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center cursor-pointer"
+      style={{ backgroundColor: kanaoTheme.background }}
+      onClick={handleSkip}
+    >
       <div className="w-24 h-24 mb-8 rounded-full overflow-hidden flex items-center justify-center" style={{ backgroundColor: kanaoTheme.accent }}>
         <Image src="/bb.jpg" alt="kanao" width={96} height={96} priority />
       </div>
@@ -205,35 +245,45 @@ function BBPreloader({ onComplete }: { onComplete: () => void }) {
   );
 }
 
-
-// --- MAIN PAGE COMPONENT ---
-
 export default function Home() {
-  const [appStep, setAppStep] = useState('loading'); // 'loading', 'transition', 'ready'
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("about");
+
   const containerRef = useRef(null);
   const sidebarRef = useRef(null);
   const mainContentRef = useRef(null);
 
   useGSAP(() => {
-    // This animation now triggers when the app is 'ready'
-    if (appStep === 'ready') {
+    if (!loading) {
       const tl = gsap.timeline();
       tl.from(sidebarRef.current, { x: -50, opacity: 0, duration: 0.8, ease: "power3.out" });
       tl.from(mainContentRef.current, { y: 50, opacity: 0, duration: 0.8, ease: "power3.out" }, "-=0.6");
     }
-  }, { scope: containerRef, dependencies: [appStep] });
+  }, { scope: containerRef, dependencies: [loading] });
 
-  // This is the new logic for the sequence!
-  if (appStep === 'loading') {
-    return <BBPreloader onComplete={() => setAppStep('transition')} />;
+  if (loading) {
+    return <BBPreloader onComplete={() => setLoading(false)} />;
   }
 
-  if (appStep === 'transition') {
-    return <Transition onComplete={() => setAppStep('ready')} />;
-  }
-  
-  // This part will only show when appStep is 'ready'
+  const skills = [
+    { name: "D365 F&O Development (X++)", percentage: 95 },
+    { name: "SSRS Report Development", percentage: 90 },
+    { name: "Debugging & Code Review", percentage: 90 },
+    { name: "Solution Design & Analysis", percentage: 85 },
+    { name: "Security Role Configuration", percentage: 85 },
+    { name: "SQL Server", percentage: 80 },
+  ];
+
+  const experiences = [
+    { title: "Software Developer", company: "COMM-IT Consultancy Services Sdn. Bhd.", period: "2022 - Present", description: "Developing custom X++ solutions for D365 F&O, designing and customizing SSRS reports, forms, and data entities. Also responsible for configuring security roles and collaborating with analysts to create technical solutions." },
+    { title: "D365 F&O Regional Expansion Project", company: "Goldbell Group (Malaysia)", period: "2023 - 2024", description: "Adapted the Singapore D365 F&O implementation for Malaysia, focusing on adding localized compliance features and customizing SSRS reports and e-invoices for local regulations." },
+    { title: "D365 Business Central Implementation Project", company: "JG Containers (M) Sdn. Bhd.", period: "2024 - Present", description: "Completed technical development training for Business Central and delivered custom reports, enhancing layouts to meet specific client requirements and align with their business processes." },
+  ];
+
+  const education = [
+    { title: "Bachelor of Electronic Engineering (Computer) with Honours", school: "Universiti Malaysia Sabah (UMS)", period: "2016 - 2020", description: "Final Year Project: IoT-Based Home Surveillance Robotic Vehicle with Cry & Scream Detection." },
+  ];
+
   return (
     <div
       ref={containerRef}
@@ -259,9 +309,9 @@ export default function Home() {
             </motion.div>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
               <h1 className="text-xl font-bold text-center" style={{ color: kanaoTheme.accentLight }}>
-                <ScrambleText text="Taeha" />
+                <ScrambleText text="Shiru" />
               </h1>
-              <p className="text-sm text-center" style={{ color: kanaoTheme.accent }}>Rapie's Princess</p>
+              <p className="text-sm text-center" style={{ color: kanaoTheme.accent }}>Software Developer</p>
             </motion.div>
             <div className="w-full space-y-4">
               <motion.div className="flex items-start gap-3" whileHover={{ x: 5 }}>
@@ -275,21 +325,21 @@ export default function Home() {
                 <FaGithub size={20} style={{ color: kanaoTheme.highlight, marginTop: "2px" }} />
                 <div>
                   <p className="text-xs uppercase" style={{ color: kanaoTheme.accent }}>GitHub</p>
-                  <p className="text-sm" style={{ color: kanaoTheme.accentLight }}> git push origin rapie-heart</p>
+                  <p className="text-sm" style={{ color: kanaoTheme.accentLight }}>frostmoon-dev</p>
                 </div>
               </motion.div>
               <motion.div className="flex items-start gap-3" whileHover={{ x: 5 }}>
                 <GiHeartStake size={20} style={{ color: kanaoTheme.highlight, marginTop: "2px" }} />
                 <div>
                   <p className="text-xs uppercase" style={{ color: kanaoTheme.accent }}>Fav Language</p>
-                  <p className="text-sm" style={{ color: kanaoTheme.accentLight }}>Anything Rapie says</p>
+                  <p className="text-sm" style={{ color: kanaoTheme.accentLight }}>X++</p>
                 </div>
               </motion.div>
               <motion.div className="flex items-start gap-3" whileHover={{ x: 5 }}>
                 <FaMusic size={20} style={{ color: kanaoTheme.highlight, marginTop: "2px" }} />
                 <div>
                   <p className="text-xs uppercase" style={{ color: kanaoTheme.accent }}>Currently Listening To:</p>
-                  <p className="text-sm" style={{ color: kanaoTheme.accentLight }}>Rapie's racist comments</p>
+                  <p className="text-sm" style={{ color: kanaoTheme.accentLight }}>The sweet sounds of code compiling~</p>
                 </div>
               </motion.div>
             </div>

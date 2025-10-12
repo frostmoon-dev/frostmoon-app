@@ -52,9 +52,6 @@ export default function ProfessionalTab() {
       <GlowingCard>
         <div className="space-y-4">
           <p style={{ color: kanaoTheme.accentLight }}>
-            <GlitchText text="Professional Rafie Glazer. Proud." />
-          </p>
-          {/* <p style={{ color: kanaoTheme.accentLight }}>
             <GlitchText text="I'm a Microsoft D365 Finance & Operations and Business Central Technical Developer with over 3 years of experience in the field." />
           </p>
           <p style={{ color: kanaoTheme.accentLight }}>
@@ -62,7 +59,7 @@ export default function ProfessionalTab() {
           </p>
           <p style={{ color: kanaoTheme.accentLight }}>
             <GlitchText text="I have a proven track record of delivering high-quality solutions for various D365 implementations, ensuring systems are efficient, maintainable, and perfectly aligned with business needs." />
-          </p> */}
+          </p>
         </div>
       </GlowingCard>
     </motion.div>
