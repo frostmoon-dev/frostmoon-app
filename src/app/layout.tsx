@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${jetbrainsMono.variable} ${orbitron.variable} antialiased`}>
         <AnimatePresence mode="wait">
           <div key={pathname}>
-            <Transition />
+            <Transition onComplete={() => {}} />
             {children}
           </div>
         </AnimatePresence>
