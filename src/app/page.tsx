@@ -14,7 +14,7 @@ import { motion } from "framer-motion";
 import Transition from "./components/transition"; // We need this now!
 import About from "./components/about";
 import Professional from "./components/professional";
-import Resume from "./components/resume";
+// import Resume from "./components/resume";
 
 gsap.registerPlugin(useGSAP, TextPlugin, ScrollTrigger);
 
@@ -308,7 +308,7 @@ export default function Home() {
         <div ref={mainContentRef} className="md:col-span-3">
           {/* Tab Navigation */}
           <div className="flex gap-8 mb-8 pb-4 justify-center flex-wrap" style={{ borderColor: `${kanaoTheme.accent}30` }}>
-            {["about", "professional", "resume"].map((tab) => (
+            {["about", "professional"].map((tab) => (
               <motion.button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -333,7 +333,7 @@ export default function Home() {
           {/* Tab Content */}
           {activeTab === "about" && <About />}
           {activeTab === "professional" && <Professional />}
-          {activeTab === "resume" && <Resume />}
+          {/* {activeTab === "resume" && <Resume />} */}
         </div>
       </div>
 
