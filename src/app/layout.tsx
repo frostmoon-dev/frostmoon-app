@@ -27,15 +27,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-<<<<<<< HEAD
-      <body className={`${jetbrainsMono.variable} ${orbitron.variable} antialiased`}>
-        <AnimatePresence mode="wait">
-          <div key={pathname}>
-            <Transition />
-            {children}
-          </div>
-        </AnimatePresence>
-=======
       <body
         className={`${jetbrainsMono.variable} ${caseOrbitron.variable} antialiased`}
       >
@@ -45,7 +36,6 @@ export default function RootLayout({
           src="//code.tidio.co/uwxsz6qiplidpo3cjoqwat1sapidgdna.js"
         />
         {children}
->>>>>>> parent of 3f828bc (before bb)
       </body>
     </html>
   );

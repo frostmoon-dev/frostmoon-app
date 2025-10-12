@@ -21,56 +21,6 @@ type ResumeProps = {
   onExperienceClick?: (experience: Experience) => void;
 };
 
-<<<<<<< HEAD
-const skills = [
-  { name: "Majok", percentage: 80 },
-  { name: "Affection", percentage: 90 },
-  { name: "?????", percentage: 100 },
-  { name: "Humor", percentage: 60 },
-];
-
-const experiences = [
-  { title: "Software Developer", company: "COMM-IT Consultancy Services Sdn. Bhd.", period: "2022 - Present", description: "Developing custom X++ solutions for D365 F&O, designing and customizing SSRS reports, forms, and data entities. Also responsible for configuring security roles and collaborating with analysts to create technical solutions." },
-  { title: "D365 F&O Regional Expansion Project", company: "Goldbell Group (Malaysia)", period: "2023 - 2024", description: "Adapted the Singapore D365 F&O implementation for Malaysia, focusing on adding localized compliance features and customizing SSRS reports and e-invoices for local regulations." },
-  { title: "D365 Business Central Implementation Project", company: "JG Containers (M) Sdn. Bhd.", period: "2024 - Present", description: "Completed technical development training for Business Central and delivered custom reports, enhancing layouts to meet specific client requirements and align with their business processes." },
-];
-
-const education = [
-  { title: "Does 3 months loving a boyfriend count as experience? :3"}];
-// const education = [
-//   { title: "Bachelor of Electronic Engineering (Computer) with Honours", school: "Universiti Malaysia Sabah (UMS)", period: "2016 - 2020", description: "Final Year Project: IoT-Based Home Surveillance Robotic Vehicle with Cry & Scream Detection." },
-// ];
-
-export default function ResumePage() {
-  const headingRef = useRef<HTMLHeadingElement>(null);
-
-  useEffect(() => {
-    if (headingRef.current) {
-      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=<>?";
-      let frame = 0;
-      const maxFrames = 16;
-      const interval = setInterval(() => {
-        if (headingRef.current) {
-          if (frame < maxFrames) {
-            headingRef.current.textContent = Array.from("Resume")
-              .map((c) => (c === " " ? " " : chars[Math.floor(Math.random() * chars.length)]))
-              .join("");
-            frame++;
-          } else {
-            headingRef.current.textContent = "Resume";
-            clearInterval(interval);
-          }
-        }
-      }, 32);
-
-      gsap.fromTo(
-        headingRef.current,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 1, ease: "power3.out" }
-      );
-    }
-  }, []);
-=======
 function AnimateOnView({ children }: { children: React.ReactNode }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
@@ -79,7 +29,6 @@ function AnimateOnView({ children }: { children: React.ReactNode }) {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0 },
   };
->>>>>>> parent of 3f828bc (before bb)
 
   return (
     <motion.div
@@ -104,23 +53,6 @@ export default function Resume({ theme, skills, experiences, education, onExperi
         <div>
           <h3 className="text-2xl font-bold mb-6" style={{ color: theme.accentLight }}>
             Experience
-<<<<<<< HEAD
-          </h2>
-          <div className="space-y-4">
-            {/* {experiences.map((exp, idx) => (
-              <motion.div key={idx} className="relative p-6 rounded-lg overflow-hidden" style={{ backgroundColor: `${kanaoTheme.accent}10` }} whileHover={{ scale: 1.02 }} transition={{ type: "spring", stiffness: 300 }}>
-                <div className="relative z-10">
-                  <h4 className="text-lg font-bold mb-2" style={{ color: kanaoTheme.highlight }}>{exp.title}</h4>
-                  <p className="text-sm mb-1 italic" style={{ color: kanaoTheme.accentLight }}>{exp.company}</p>
-                  <p className="text-sm mb-3" style={{ color: kanaoTheme.accent }}>{exp.period}</p>
-                  <p style={{ color: kanaoTheme.accentLight }}>{exp.description}</p>
-                </div>
-                <motion.div className="absolute top-3 right-3 text-2xl opacity-50">
-                  <Briefcase style={{ color: kanaoTheme.accentLight }} />
-                </motion.div>
-              </motion.div>
-            ))} */}
-=======
           </h3>
           <div className="space-y-6">
             {experiences.map((exp, idx) => (
@@ -137,24 +69,10 @@ export default function Resume({ theme, skills, experiences, education, onExperi
                 <p style={{ color: theme.accentLight }}>{exp.description}</p>
               </div>
             ))}
->>>>>>> parent of 3f828bc (before bb)
           </div>
         </div>
       </AnimateOnView>
 
-<<<<<<< HEAD
-        {/* <CuteDivider /> */}
-
-        <div>
-          <NeonHeader text="Experience" />
-          {education.map((edu, idx) => (
-            <motion.div key={idx} className="relative p-6 rounded-lg overflow-hidden" style={{ backgroundColor: `${kanaoTheme.accent}10` }} whileHover={{ scale: 1.02 }} transition={{ type: "spring", stiffness: 300 }}>
-              <div className="relative z-10">
-                <h4 className="text-lg font-bold mb-2" style={{ color: kanaoTheme.highlight }}>{edu.title}</h4>
-                {/* <p className="text-sm mb-1 italic" style={{ color: kanaoTheme.accentLight }}>{edu.school}</p>
-                <p className="text-sm mb-3" style={{ color: kanaoTheme.accent }}>{edu.period}</p>
-                <p style={{ color: kanaoTheme.accentLight }}>{edu.description}</p> */}
-=======
       <AnimateOnView>
         <div>
           <h3 className="text-2xl font-bold mb-6" style={{ color: theme.accentLight }}>
@@ -173,7 +91,6 @@ export default function Resume({ theme, skills, experiences, education, onExperi
                   {edu.period}
                 </p>
                 <p style={{ color: theme.accentLight }}>{edu.description}</p>
->>>>>>> parent of 3f828bc (before bb)
               </div>
             ))}
           </div>
