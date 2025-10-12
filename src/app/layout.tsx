@@ -4,6 +4,7 @@ import { JetBrains_Mono, Orbitron } from "next/font/google";
 import { usePathname } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
 import Transition from "./components/transition";
+import Script from "next/script";
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
@@ -29,6 +30,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
           </div>
         </AnimatePresence>
+        <Script
+          strategy="lazyOnload"
+          src="//code.tidio.co/uwxsz6qiplidpo3cjoqwat1sapidgdna.js"
+        />
       </body>
     </html>
   );
