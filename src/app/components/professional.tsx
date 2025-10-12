@@ -55,10 +55,10 @@ export default function ProfessionalTab() {
             <GlitchText text="Professional Rafie Glazer. Proud." />
           </p>
           {/* <p style={{ color: kanaoTheme.accentLight }}>
-            <GlitchText text="I'm a Microsoft D365 Finance & Operations and Business Central Technical Developer with over 3 years of experience in the field." />
+            <GlitchText text="I&apos;m a Microsoft D365 Finance & Operations and Business Central Technical Developer with over 3 years of experience in the field." />
           </p>
           <p style={{ color: kanaoTheme.accentLight }}>
-            <GlitchText text="My expertise lies in X++ development, SSRS report customization, and building system extensions. I have a strong background in taking business requirements and transforming them into robust technical solutions. I'm skilled in the full development lifecycle, from analysis and design to debugging and deployment." />
+            <GlitchText text="My expertise lies in X++ development, SSRS report customization, and building system extensions. I have a strong background in taking business requirements and transforming them into robust technical solutions. I&apos;m skilled in the full development lifecycle, from analysis and design to debugging and deployment." />
           </p>
           <p style={{ color: kanaoTheme.accentLight }}>
             <GlitchText text="I have a proven track record of delivering high-quality solutions for various D365 implementations, ensuring systems are efficient, maintainable, and perfectly aligned with business needs." />
