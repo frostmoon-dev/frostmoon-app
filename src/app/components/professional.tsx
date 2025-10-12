@@ -1,3 +1,5 @@
+import { GlitchText } from "../page"; // You may need to adjust this import path!
+
 type ProfessionalProps = {
   theme: {
     background: string;
@@ -15,7 +17,7 @@ export default function Professional({ theme }: ProfessionalProps) {
           className="text-3xl font-bold mb-4"
           style={{ color: theme.accentLight }}
         >
-          Professional Summary
+          <GlitchText text="Professional Summary" />
         </h2>
         <div
           className="w-85 h-1 rounded"
@@ -25,13 +27,13 @@ export default function Professional({ theme }: ProfessionalProps) {
 
       <div className="space-y-4">
         <p style={{ color: theme.accentLight }}>
-          I'm a Microsoft D365 Finance & Operations and Business Central Technical Developer with over 3 years of experience in the field.
+          <GlitchText text="I'm a Microsoft D365 Finance & Operations and Business Central Technical Developer with over 3 years of experience in the field." />
         </p>
         <p style={{ color: theme.accentLight }}>
-          My expertise lies in X++ development, SSRS report customization, and building system extensions. I have a strong background in taking business requirements and transforming them into robust technical solutions. I'm skilled in the full development lifecycle, from analysis and design to debugging and deployment.
+          <GlitchText text="My expertise lies in X++ development, SSRS report customization, and building system extensions. I have a strong background in taking business requirements and transforming them into robust technical solutions. I'm skilled in the full development lifecycle, from analysis and design to debugging and deployment." />
         </p>
         <p style={{ color: theme.accentLight }}>
-          I have a proven track record of delivering high-quality solutions for various D365 implementations, ensuring systems are efficient, maintainable, and perfectly aligned with business needs.
+          <GlitchText text="I have a proven track record of delivering high-quality solutions for various D365 implementations, ensuring systems are efficient, maintainable, and perfectly aligned with business needs." />
         </p>
       </div>
     </div>

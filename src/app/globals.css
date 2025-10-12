@@ -21,8 +21,25 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-quicksand), sans-serif;
+  /* This is now your primary font for paragraphs and small text */
+  font-family: var(--font-jetbrains-mono), monospace;
   scroll-behavior: smooth;
+}
+
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #ff0099, #d60076);
+  border-radius: 10px;
+}
+
+
+/* ADD THIS NEW RULE FOR HEADINGS! */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-orbitron), sans-serif;
 }
 
 /* Scrollbar */
@@ -32,4 +49,134 @@ body {
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(to bottom, #ff0099, #d60076);
   border-radius: 10px;
+}
+
+/* /components/layout/menu/menu.css */
+
+/* --- I'm setting up your beautiful color palette as variables! --- */
+:root {
+  --menu-bg: #2E294E;
+  --menu-accent: #D8BFD8;
+  --menu-accent-light: #E6E6FA;
+  --menu-highlight: #FFB6C1;
+  --font-body: var(--font-jetbrains-mono), monospace;
+  --font-heading: var(--font-orbitron), sans-serif;
+}
+
+/* --- Basic Container & Bar Styles --- */
+.menu-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* Super important so it stays on top! */
+}
+
+.menu-bar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  color: var(--menu-accent-light);
+}
+
+.menu-logo a, .menu-open p, .menu-close p {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: inherit;
+}
+
+.menu-open, .menu-close, .menu-close-icon {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.menu-open:hover, .menu-close:hover, .menu-close-icon:hover {
+  color: var(--menu-highlight);
+}
+
+
+/* --- The Main Event: The Overlay! --- */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--menu-bg);
+  color: var(--menu-accent-light);
+  /* This is the initial state for the GSAP animation */
+  clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-overlay-bar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  flex-shrink: 0;
+}
+
+.menu-copy {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2rem;
+}
+
+.menu-link-item {
+  overflow: hidden; /* This is for the GSAP animation to work! */
+}
+
+.menu-link {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 6vw, 5rem); /* Responsive font size! */
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--menu-accent-light);
+  transition: color 0.3s ease;
+}
+
+.menu-link:hover {
+  color: var(--menu-highlight);
+}
+
+.menu-close-icon {
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
+  font-size: 1.5rem;
+  display: none; /* Let's hide this since you have a text close button */
+}
+
+.menu-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--menu-accent);
+}
+
+.menu-info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.menu-info-col a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.3s ease;
+}
+
+.menu-info-col a:hover {
+  color: var(--menu-highlight);
 }
