@@ -1,22 +1,15 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { Hexagon } from "lucide-react";
-import { useGSAP } from "@gsap/react";
-
-const kanaoTheme = {
-  accent: "#D8BFD8",
-  accentLight: "#E6E6FA",
-  highlight: "#FFB6C1",
-};
+import { Heart } from "lucide-react";
 
 export function NeonHeader({ text }: { text: string }) {
   return (
     <motion.h2
-      className="text-3xl font-bold mb-4"
+      className="text-3xl font-bold mb-6 text-center"
       style={{
-        color: kanaoTheme.accentLight,
-        textShadow: `0 0 20px ${kanaoTheme.highlight}80, 0 0 40px ${kanaoTheme.highlight}40`,
+        color: 'var(--foreground)',
+        textShadow: `0 0 15px var(--accent), 0 0 25px var(--accent)`,
       }}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -30,9 +23,9 @@ export function NeonHeader({ text }: { text: string }) {
 export function GlowingCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
     <motion.div
-      className={`relative p-6 rounded-lg overflow-hidden ${className}`}
-      style={{ backgroundColor: `${kanaoTheme.accent}10` }}
-      whileHover={{ scale: 1.02 }}
+      className={`relative p-6 rounded-lg overflow-hidden border ${className}`}
+      style={{ backgroundColor: `var(--background-light)`, borderColor: 'rgba(var(--accent-rgb), 0.2)' }}
+      whileHover={{ scale: 1.02, y: -5, boxShadow: `0 0 20px rgba(var(--accent-rgb), 0.2)` }}
       transition={{ type: "spring", stiffness: 300 }}
     >
       <div className="relative z-10">{children}</div>
@@ -42,55 +35,56 @@ export function GlowingCard({ children, className = "" }: { children: React.Reac
 
 export function CuteDivider() {
   return (
-    <div className="flex items-center justify-center gap-3 my-6">
+    <div className="flex items-center justify-center gap-3 my-8">
       <div
         className="h-px flex-1"
-        style={{ background: `linear-gradient(to right, ${kanaoTheme.highlight}00, ${kanaoTheme.highlight}80)` }}
+        style={{ background: `linear-gradient(to right, transparent, var(--accent))` }}
       />
-      <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }}>
-        <Hexagon size={24} style={{ color: kanaoTheme.highlight }} fill={kanaoTheme.highlight} />
+      <motion.div animate={{ rotate: 360, scale: [1, 1.2, 1] }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }}>
+        <Heart size={20} style={{ color: 'var(--accent)' }} fill={'var(--accent)'} />
       </motion.div>
       <div
         className="h-px flex-1"
-        style={{ background: `linear-gradient(to left, ${kanaoTheme.highlight}00, ${kanaoTheme.highlight}80)` }}
+        style={{ background: `linear-gradient(to left, transparent, var(--accent))` }}
       />
     </div>
   );
 }
 
 export function GlitchText({ text, className = "" }: { text: string; className?: string }) {
-  const [display, setDisplay] = useState("");
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const chars = "█████ █████ █████ █████ █████ █████";
-
-  const scramble = (original: string) =>
-    original
-      .split("")
-      .map((char) => (char === " " ? " " : chars[Math.floor(Math.random() * chars.length)]))
-      .join("");
-
-  useEffect(() => {
-    let frame = 0;
-    const maxFrames = 5;
-    setDisplay(scramble(text));
-
-    intervalRef.current = setInterval(() => {
-      if (frame < maxFrames) {
-        setDisplay(scramble(text));
-        frame++;
-      } else {
-        setDisplay(text);
-        clearInterval(intervalRef.current!);
-      }
-    }, 40);
-
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [text]);
-
-  return <span className={className}>{display}</span>;
+    const [display, setDisplay] = useState("");
+    const intervalRef = useRef<NodeJS.Timeout | null>(null);
+    const chars = "█████ █████ █████ █████ █████ █████";
+  
+    const scramble = (original: string) =>
+      original
+        .split("")
+        .map((char) => (char === " " ? " " : chars[Math.floor(Math.random() * chars.length)]))
+        .join("");
+  
+    useEffect(() => {
+      let frame = 0;
+      const maxFrames = 5;
+      setDisplay(scramble(text));
+  
+      intervalRef.current = setInterval(() => {
+        if (frame < maxFrames) {
+          setDisplay(scramble(text));
+          frame++;
+        } else {
+          setDisplay(text);
+          clearInterval(intervalRef.current!);
+        }
+      }, 40);
+  
+      return () => {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+      };
+    }, [text]);
+  
+    return <span className={className}>{display}</span>;
 }
+  
 
 export function AnimatedSkillBar({ name, percentage }: { name: string; percentage: number }) {
   const ref = useRef(null);
@@ -102,21 +96,27 @@ export function AnimatedSkillBar({ name, percentage }: { name: string; percentag
         setIsInView(true);
         observer.disconnect();
       }
-    });
+    }, { threshold: 0.5 }); // Trigger when 50% of the element is visible
+
     if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
+    
+    return () => {
+      if(ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
   }, []);
 
   return (
     <div ref={ref}>
-      <div className="flex justify-between mb-2">
-        <p style={{ color: kanaoTheme.accentLight }}>{name}</p>
-        <p style={{ color: kanaoTheme.accent }}>{percentage}%</p>
+      <div className="flex justify-between mb-2 text-sm">
+        <p style={{ color: 'var(--foreground)' }}>{name}</p>
+        <p style={{ color: 'var(--foreground-muted)' }}>{percentage}%</p>
       </div>
-      <div className="h-3 rounded-full overflow-hidden" style={{ backgroundColor: `${kanaoTheme.accent}20` }}>
+      <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--background)' }}>
         <motion.div
           className="h-full rounded-full"
-          style={{ backgroundColor: kanaoTheme.highlight, boxShadow: `0 0 15px ${kanaoTheme.highlight}` }}
+          style={{ backgroundColor: 'var(--accent)', boxShadow: `0 0 15px var(--accent)` }}
           initial={{ width: "0%" }}
           animate={isInView ? { width: `${percentage}%` } : { width: "0%" }}
           transition={{ duration: 1.2, ease: "easeOut" }}

@@ -2,27 +2,18 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { MdEmail } from "react-icons/md";
-import { FaMusic, FaLinkedin, FaGithub } from "react-icons/fa6";
+import { FaLinkedin, FaGithub } from "react-icons/fa6";
 import { GiHeartStake } from "react-icons/gi";
-import { Heart, Moon, MoonIcon, MoonStarIcon } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { TextPlugin } from "gsap/TextPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { motion } from "framer-motion";
 import About from "./components/about";
 import Professional from "./components/professional";
 import Resume from "./components/resume";
-import { Moon_Dance } from "next-font/google";
 
 gsap.registerPlugin(useGSAP, TextPlugin, ScrollTrigger);
-
-const kanaoTheme = {
-  background: "#2E294E",
-  accent: "#D8BFD8",
-  accentLight: "#E6E6FA",
-  highlight: "#FFB6C1",
-};
 
 function FloatingParticles() {
   const particles = Array.from({ length: 15 }, (_, i) => ({
@@ -39,7 +30,7 @@ function FloatingParticles() {
         <motion.div
           key={p.id}
           className="absolute w-1 h-1 rounded-full"
-          style={{ backgroundColor: kanaoTheme.highlight, opacity: 0.6 }}
+          style={{ backgroundColor: 'var(--accent-secondary)', opacity: 0.6 }}
           animate={{
             y: [p.y + "%", p.y - 100 + "%"],
             x: [p.x + "%", p.x + (Math.random() * 30 - 15) + "%"],
@@ -119,6 +110,8 @@ function ScrollProgressBar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // BB: This needs a CSS variable with an RGB value to work with opacity.
+  // I'll assume you have --accent-rgb in your CSS like: --accent-rgb: 100, 255, 218;
   return (
     <div
       style={{
@@ -127,16 +120,16 @@ function ScrollProgressBar() {
         left: 0,
         width: "100%",
         height: "5px",
-        backgroundColor: `${kanaoTheme.accent}30`,
+        backgroundColor: 'rgba(var(--accent-rgb, 100, 255, 218), 0.2)',
         zIndex: 100,
       }}
     >
       <div
         style={{
           height: "100%",
-          backgroundColor: kanaoTheme.highlight,
+          backgroundColor: 'var(--accent)',
           width: `${scrollPercentage}%`,
-          boxShadow: `0 0 10px ${kanaoTheme.highlight}`,
+          boxShadow: `0 0 10px var(--accent)`,
           transition: "width 0.1s linear",
         }}
       />
@@ -231,8 +224,8 @@ function BBPreloader({ onComplete }: { onComplete: () => void }) {
       const loadingTexts = [
         "Accessing site...",
         "Bypassing Firewalls...",
-        "Injecting flowers...",
-        "Welcome to my portfolio...",
+        "Injecting Sakura...",
+        "Welcome to my Portfolio...",
       ];
       const tl = timeline.current;
 
@@ -284,28 +277,28 @@ function BBPreloader({ onComplete }: { onComplete: () => void }) {
     <div
       ref={containerRef}
       className="fixed inset-0 z-50 flex flex-col items-center justify-center cursor-pointer"
-      style={{ backgroundColor: kanaoTheme.background }}
+      style={{ backgroundColor: 'var(--background)' }}
       onClick={handleSkip}
     >
       <div className="w-24 h-24 mb-8 rounded-full overflow-hidden flex items-center justify-center">
-        <Image src="/layla.gif" alt="kanao" width={96} height={96} priority />
+        <Image src="/layla.gif" alt="Layla" width={96} height={96} priority />
       </div>
       <p
         ref={textRef}
         className="text-xl h-8 font-orbitron"
-        style={{ color: kanaoTheme.accent }}
+        style={{ color: 'var(--foreground)' }}
       ></p>
       <div
         className="w-3/4 max-w-lg h-2 mt-4 rounded-full overflow-hidden"
-        style={{ backgroundColor: `${kanaoTheme.accent}20` }}
+        style={{ backgroundColor: 'rgba(var(--foreground-rgb), 0.1)' }}
       >
         <div
           ref={progressRef}
           className="h-full rounded-full"
-          style={{ width: "0%", backgroundColor: kanaoTheme.accent }}
+          style={{ width: "0%", backgroundColor: 'var(--accent)' }}
         />
       </div>
-      <p className="text-xs mt-8" style={{ color: `${kanaoTheme.accent}80` }}>
+      <p className="text-xs mt-8" style={{ color: 'var(--foreground-muted)' }}>
         Skip at your own risk.
       </p>
     </div>
@@ -319,6 +312,13 @@ export default function Home() {
   const containerRef = useRef(null);
   const sidebarRef = useRef(null);
   const mainContentRef = useRef(null);
+
+  useEffect(() => {
+    // BB: My little trick to not annoy you every single time!
+    if (sessionStorage.getItem("preloaderSkipped") === "true") {
+      setLoading(false);
+    }
+  }, []);
 
   useGSAP(
     () => {
@@ -344,73 +344,34 @@ export default function Home() {
     return <BBPreloader onComplete={() => setLoading(false)} />;
   }
 
-  const skills = [
-    { name: "D365 F&O Development (X++)", percentage: 95 },
-    { name: "SSRS Report Development", percentage: 90 },
-    { name: "Debugging & Code Review", percentage: 90 },
-    { name: "Solution Design & Analysis", percentage: 85 },
-    { name: "Security Role Configuration", percentage: 85 },
-    { name: "SQL Server", percentage: 80 },
-  ];
-
-  const experiences = [
-    {
-      title: "Software Developer",
-      company: "COMM-IT Consultancy Services Sdn. Bhd.",
-      period: "2022 - Present",
-      description:
-        "Developing custom X++ solutions for D365 F&O, designing and customizing SSRS reports, forms, and data entities. Also responsible for configuring security roles and collaborating with analysts to create technical solutions.",
-    },
-    {
-      title: "D365 F&O Regional Expansion Project",
-      company: "Goldbell Group (Malaysia)",
-      period: "2023 - 2024",
-      description:
-        "Adapted the Singapore D365 F&O implementation for Malaysia, focusing on adding localized compliance features and customizing SSRS reports and e-invoices for local regulations.",
-    },
-    {
-      title: "D365 Business Central Implementation Project",
-      company: "JG Containers (M) Sdn. Bhd.",
-      period: "2024 - Present",
-      description:
-        "Completed technical development training for Business Central and delivered custom reports, enhancing layouts to meet specific client requirements and align with their business processes.",
-    },
-  ];
-
-  const education = [
-    {
-      title: "Bachelor of Electronic Engineering (Computer) with Honours",
-      school: "Universiti Malaysia Sabah (UMS)",
-      period: "2016 - 2020",
-      description:
-        "Final Year Project: IoT-Based Home Surveillance Robotic Vehicle with Cry & Scream Detection.",
-    },
-  ];
-
   return (
     <div
       ref={containerRef}
-      className="min-h-screen p-4 sm:p-6 md:p-8 relative overflow-hidden"
-      style={{ backgroundColor: kanaoTheme.background }}
+      className="min-h-screen p-4 sm:p-6 md:p-8 relative"
+      style={{ backgroundColor: 'var(--background)' }}
     >
       <FloatingParticles />
       <CuteCursorFollower />
       <ScrollProgressBar />
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
         {/* Sidebar */}
         <motion.div
           ref={sidebarRef}
-          className="md:col-span-1 p-6 rounded-lg h-fit"
-          style={{ backgroundColor: `${kanaoTheme.accent}15` }}
-          whileHover={{ scale: 1.02 }}
+          className="md:col-span-1 p-6 rounded-lg h-fit sticky top-8"
+          style={{ backgroundColor: 'var(--background-light)' }}
+          whileHover={{ scale: 1.02, y: -5 }}
           transition={{ type: "spring", stiffness: 300 }}
         >
           <div className="flex flex-col items-center gap-6">
             <motion.div
-              className="w-32 h-32 rounded-full overflow-hidden relative"
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{ duration: 3, repeat: Infinity }}
+              className="w-32 h-32 rounded-full overflow-hidden relative border-2"
+              style={{ borderColor: 'var(--accent)'}}
+              animate={{
+                scale: [1, 1.05, 1],
+                boxShadow: ['0 0 10px rgba(var(--accent-rgb), 0)', '0 0 20px rgba(var(--accent-rgb), 0.5)', '0 0 10px rgba(var(--accent-rgb), 0)'],
+              }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
             >
               <Image
                 src="/kanao.png"
@@ -426,13 +387,13 @@ export default function Home() {
             >
               <h1
                 className="text-xl font-bold text-center"
-                style={{ color: kanaoTheme.accentLight }}
+                style={{ color: 'var(--foreground)' }}
               >
                 <ScrambleText text="Shiru" />
               </h1>
               <p
                 className="text-sm text-center"
-                style={{ color: kanaoTheme.accent }}
+                style={{ color: 'var(--foreground-muted)' }}
               >
                 Software Developer
               </p>
@@ -444,18 +405,18 @@ export default function Home() {
               >
                 <MdEmail
                   size={20}
-                  style={{ color: kanaoTheme.highlight, marginTop: "2px" }}
+                  style={{ color: 'var(--accent)', marginTop: "2px" }}
                 />
                 <div>
                   <p
                     className="text-xs uppercase"
-                    style={{ color: kanaoTheme.accent }}
+                    style={{ color: 'var(--foreground-muted)' }}
                   >
                     Email
                   </p>
                   <p
                     className="text-sm"
-                    style={{ color: kanaoTheme.accentLight }}
+                    style={{ color: 'var(--foreground)' }}
                   >
                     frostmoondev@gmail.com
                   </p>
@@ -467,18 +428,18 @@ export default function Home() {
               >
                 <FaGithub
                   size={20}
-                  style={{ color: kanaoTheme.highlight, marginTop: "2px" }}
+                  style={{ color: 'var(--accent)', marginTop: "2px" }}
                 />
                 <div>
                   <p
                     className="text-xs uppercase"
-                    style={{ color: kanaoTheme.accent }}
+                    style={{ color: 'var(--foreground-muted)' }}
                   >
                     GitHub
                   </p>
                   <p
                     className="text-sm"
-                    style={{ color: kanaoTheme.accentLight }}
+                    style={{ color: 'var(--foreground)' }}
                   >
                     frostmoon-dev
                   </p>
@@ -490,43 +451,20 @@ export default function Home() {
               >
                 <GiHeartStake
                   size={20}
-                  style={{ color: kanaoTheme.highlight, marginTop: "2px" }}
+                  style={{ color: 'var(--accent)', marginTop: "2px" }}
                 />
                 <div>
                   <p
                     className="text-xs uppercase"
-                    style={{ color: kanaoTheme.accent }}
+                    style={{ color: 'var(--foreground-muted)' }}
                   >
                     Fav Language
                   </p>
                   <p
                     className="text-sm"
-                    style={{ color: kanaoTheme.accentLight }}
+                    style={{ color: 'var(--foreground)' }}
                   >
                     X++
-                  </p>
-                </div>
-              </motion.div>
-              <motion.div
-                className="flex items-start gap-3"
-                whileHover={{ x: 5 }}
-              >
-                <FaMusic
-                  size={20}
-                  style={{ color: kanaoTheme.highlight, marginTop: "2px" }}
-                />
-                <div>
-                  <p
-                    className="text-xs uppercase"
-                    style={{ color: kanaoTheme.accent }}
-                  >
-                    Currently Listening To:
-                  </p>
-                  <p
-                    className="text-sm"
-                    style={{ color: kanaoTheme.accentLight }}
-                  >
-                    The sweet sounds of code compiling~
                   </p>
                 </div>
               </motion.div>
@@ -541,19 +479,21 @@ export default function Home() {
                 href="https://github.com/frostmoon-dev"
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.2, rotate: 10 }}
+                whileHover={{ scale: 1.2, rotate: 10, color: 'var(--accent)' }}
                 whileTap={{ scale: 0.9 }}
+                style={{ color: 'var(--foreground-muted)'}}
               >
-                <FaGithub size={20} style={{ color: kanaoTheme.accent }} />
+                <FaGithub size={20} />
               </motion.a>
               <motion.a
                 href="https://linkedin.com/in/fatihahmuhd/"
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.2, rotate: 10 }}
+                whileHover={{ scale: 1.2, rotate: 10, color: 'var(--accent)' }}
                 whileTap={{ scale: 0.9 }}
+                style={{ color: 'var(--foreground-muted)'}}
               >
-                <FaLinkedin size={20} style={{ color: kanaoTheme.accent }} />
+                <FaLinkedin size={20} />
               </motion.a>
             </motion.div>
           </div>
@@ -564,7 +504,6 @@ export default function Home() {
           {/* Tab Navigation */}
           <div
             className="flex gap-8 mb-8 pb-4 justify-center flex-wrap"
-            style={{ borderColor: `${kanaoTheme.accent}30` }}
           >
             {["about", "professional", "resume"].map((tab) => (
               <motion.button
@@ -574,10 +513,10 @@ export default function Home() {
                 style={{
                   color:
                     activeTab === tab
-                      ? kanaoTheme.highlight
-                      : kanaoTheme.accent,
+                      ? 'var(--accent)'
+                      : 'var(--foreground-muted)',
                 }}
-                whileHover={{ scale: 1.1 }}
+                whileHover={{ scale: 1.1, color: 'var(--accent)' }}
                 whileTap={{ scale: 0.95 }}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -585,7 +524,7 @@ export default function Home() {
                   <motion.div
                     layoutId="underline"
                     className="absolute bottom-0 left-0 right-0 h-1 rounded-full"
-                    style={{ backgroundColor: kanaoTheme.highlight }}
+                    style={{ backgroundColor: 'var(--accent)' }}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
                 )}
@@ -594,22 +533,32 @@ export default function Home() {
           </div>
 
           {/* Tab Content */}
-          {activeTab === "about" && <About />}
-          {activeTab === "professional" && <Professional />}
-          {activeTab === "resume" && <Resume />}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -10, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              {activeTab === "about" && <About />}
+              {activeTab === "professional" && <Professional />}
+              {activeTab === "resume" && <Resume />}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
 
       {/* Footer */}
       <motion.div
         className="text-center mt-16 pt-8 max-w-6xl mx-auto"
-        style={{ borderTop: `1px solid ${kanaoTheme.accent}30` }}
+        style={{ borderTop: `1px solid var(--background-light)` }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
       >
         <motion.p
-          style={{ color: kanaoTheme.accent }}
+          style={{ color: 'var(--foreground-muted)' }}
           animate={{ opacity: [0.5, 1, 0.5] }}
           transition={{ duration: 3, repeat: Infinity }}
         >
