@@ -28,7 +28,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-<<<<<<< Updated upstream
       <body className={`${jetbrainsMono.variable} ${orbitron.variable} antialiased`}>
         <AnimatePresence mode="wait">
           <div key={pathname}>
@@ -36,17 +35,6 @@ export default function RootLayout({
             {children}
           </div>
         </AnimatePresence>
-=======
-=======
-      <body
-        className={`${jetbrainsMono.variable} ${caseOrbitron.variable} antialiased`}
-      >
-         {/* <-- 2. PLACE IT RIGHT HERE! */}
->>>>>>> Stashed changes
-        <Script
-          strategy="lazyOnload"
-          src="//code.tidio.co/uwxsz6qiplidpo3cjoqwat1sapidgdna.js"
-        />
       </body>
     </html>
   );
