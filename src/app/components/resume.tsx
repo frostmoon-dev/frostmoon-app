@@ -5,17 +5,13 @@ import gsap from "gsap";
 import { NeonHeader, GlowingCard, CuteDivider, AnimatedSkillBar } from "./ui";
 import { Briefcase, GraduationCap } from "lucide-react";
 
-const kanaoTheme = {
-  accent: "#D8BFD8",
-  accentLight: "#E6E6FA",
-  highlight: "#FFB6C1",
-};
-
 const skills = [
-  { name: "Majok", percentage: 80 },
-  { name: "Affection", percentage: 90 },
-  { name: "?????", percentage: 100 },
-  { name: "Humor", percentage: 60 },
+  { name: "D365 F&O Development (X++)", percentage: 95 },
+  { name: "SSRS Report Development", percentage: 90 },
+  { name: "Debugging & Code Review", percentage: 90 },
+  { name: "Solution Design & Analysis", percentage: 85 },
+  { name: "Security Role Configuration", percentage: 85 },
+  { name: "SQL Server", percentage: 80 },
 ];
 
 const experiences = [
@@ -25,10 +21,8 @@ const experiences = [
 ];
 
 const education = [
-  { title: "Does 3 months loving a boyfriend count as experience? :3"}];
-// const education = [
-//   { title: "Bachelor of Electronic Engineering (Computer) with Honours", school: "Universiti Malaysia Sabah (UMS)", period: "2016 - 2020", description: "Final Year Project: IoT-Based Home Surveillance Robotic Vehicle with Cry & Scream Detection." },
-// ];
+  { title: "Bachelor of Electronic Engineering (Computer) with Honours", school: "Universiti Malaysia Sabah (UMS)", period: "2016 - 2020", description: "Final Year Project: IoT-Based Home Surveillance Robotic Vehicle with Cry & Scream Detection." },
+];
 
 export default function ResumePage() {
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -38,15 +32,16 @@ export default function ResumePage() {
       const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=<>?";
       let frame = 0;
       const maxFrames = 16;
+      const final_text = "Resume";
       const interval = setInterval(() => {
         if (headingRef.current) {
           if (frame < maxFrames) {
-            headingRef.current.textContent = Array.from("Resume")
+            headingRef.current.textContent = Array.from(final_text)
               .map((c) => (c === " " ? " " : chars[Math.floor(Math.random() * chars.length)]))
               .join("");
             frame++;
           } else {
-            headingRef.current.textContent = "Resume";
+            headingRef.current.textContent = final_text;
             clearInterval(interval);
           }
         }
@@ -61,52 +56,41 @@ export default function ResumePage() {
   }, []);
 
   return (
-    <main className="min-h-screen  flex justify-center">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-        className="space-y-8 max-w-4xl w-full"
-      >
+    <main className="min-h-screen flex justify-center">
+      <div className="space-y-8 max-w-4xl w-full">
         <div>
-          <h2
-            ref={headingRef}
-            className="text-3xl font-bold mb-4 text-center"
-            style={{ color: kanaoTheme.accentLight }}
-          >
-            Experience
-          </h2>
+           <NeonHeader text="Experience" />
           <div className="space-y-4">
-            {/* {experiences.map((exp, idx) => (
-              <motion.div key={idx} className="relative p-6 rounded-lg overflow-hidden" style={{ backgroundColor: `${kanaoTheme.accent}10` }} whileHover={{ scale: 1.02 }} transition={{ type: "spring", stiffness: 300 }}>
+            {experiences.map((exp, idx) => (
+              <motion.div key={idx} className="relative p-6 rounded-lg overflow-hidden" style={{ backgroundColor: `var(--background-light)` }} whileHover={{ scale: 1.02, y: -5 }} transition={{ type: "spring", stiffness: 300 }}>
                 <div className="relative z-10">
-                  <h4 className="text-lg font-bold mb-2" style={{ color: kanaoTheme.highlight }}>{exp.title}</h4>
-                  <p className="text-sm mb-1 italic" style={{ color: kanaoTheme.accentLight }}>{exp.company}</p>
-                  <p className="text-sm mb-3" style={{ color: kanaoTheme.accent }}>{exp.period}</p>
-                  <p style={{ color: kanaoTheme.accentLight }}>{exp.description}</p>
+                  <h4 className="text-lg font-bold mb-2" style={{ color: 'var(--accent)' }}>{exp.title}</h4>
+                  <p className="text-sm mb-1 italic" style={{ color: 'var(--foreground)' }}>{exp.company}</p>
+                  <p className="text-sm mb-3" style={{ color: 'var(--foreground-muted)' }}>{exp.period}</p>
+                  <p style={{ color: 'var(--foreground)' }}>{exp.description}</p>
                 </div>
-                <motion.div className="absolute top-3 right-3 text-2xl opacity-50">
-                  <Briefcase style={{ color: kanaoTheme.accentLight }} />
+                <motion.div className="absolute top-3 right-3 text-2xl opacity-20">
+                  <Briefcase style={{ color: 'var(--foreground-muted)' }} />
                 </motion.div>
               </motion.div>
-            ))} */}
+            ))}
           </div>
         </div>
 
-        {/* <CuteDivider /> */}
+        <CuteDivider />
 
         <div>
-          <NeonHeader text="Experience" />
+          <NeonHeader text="Education" />
           {education.map((edu, idx) => (
-            <motion.div key={idx} className="relative p-6 rounded-lg overflow-hidden" style={{ backgroundColor: `${kanaoTheme.accent}10` }} whileHover={{ scale: 1.02 }} transition={{ type: "spring", stiffness: 300 }}>
+            <motion.div key={idx} className="relative p-6 rounded-lg overflow-hidden" style={{ backgroundColor: `var(--background-light)` }} whileHover={{ scale: 1.02, y: -5 }} transition={{ type: "spring", stiffness: 300 }}>
               <div className="relative z-10">
-                <h4 className="text-lg font-bold mb-2" style={{ color: kanaoTheme.highlight }}>{edu.title}</h4>
-                {/* <p className="text-sm mb-1 italic" style={{ color: kanaoTheme.accentLight }}>{edu.school}</p>
-                <p className="text-sm mb-3" style={{ color: kanaoTheme.accent }}>{edu.period}</p>
-                <p style={{ color: kanaoTheme.accentLight }}>{edu.description}</p> */}
+                <h4 className="text-lg font-bold mb-2" style={{ color: 'var(--accent)' }}>{edu.title}</h4>
+                <p className="text-sm mb-1 italic" style={{ color: 'var(--foreground)' }}>{edu.school}</p>
+                <p className="text-sm mb-3" style={{ color: 'var(--foreground-muted)' }}>{edu.period}</p>
+                <p style={{ color: 'var(--foreground)' }}>{edu.description}</p>
               </div>
-              <motion.div className="absolute top-3 right-3 text-2xl opacity-50">
-                <GraduationCap style={{ color: kanaoTheme.accentLight }} />
+              <motion.div className="absolute top-3 right-3 text-2xl opacity-20">
+                <GraduationCap style={{ color: 'var(--foreground-muted)' }} />
               </motion.div>
             </motion.div>
           ))}
@@ -124,7 +108,7 @@ export default function ResumePage() {
             </div>
           </GlowingCard>
         </div>
-      </motion.div>
+      </div>
     </main>
   );
 }

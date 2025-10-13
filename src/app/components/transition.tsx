@@ -52,16 +52,17 @@ export default function Transition({ onComplete }: { onComplete: () => void }) {
 
   return (
     <AnimatePresence>
-      {/* ... the rest of your JSX for the hacker screen and pop-up is the same ... */}
       {showHackerScreen && (
         <motion.div
           key="hacker-screen"
-          className="fixed top-0 left-0 w-full h-full bg-black flex items-center justify-center z-50 overflow-hidden"
+          className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50 overflow-hidden"
+          style={{ backgroundColor: 'var(--background)' }}
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 0.5 } }}
         >
           <pre 
-            className="text-fuchsia-500 text-sm whitespace-pre-wrap break-all font-mono"
+            className="text-sm whitespace-pre-wrap break-all font-mono"
+            style={{ color: 'var(--accent)' }}
           >
             {hackerText}
           </pre>
@@ -77,10 +78,16 @@ export default function Transition({ onComplete }: { onComplete: () => void }) {
           exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.5 } }}
         >
           <div 
-            className="bg-[#1a1a2e] p-6 sm:p-8 w-11/12 max-w-md rounded-lg shadow-2xl text-center border border-fuchsia-500/50"
+            className="p-6 sm:p-8 w-11/12 max-w-md rounded-lg shadow-2xl text-center border"
+            style={{ 
+              backgroundColor: 'var(--background-light)',
+              borderColor: 'var(--accent)',
+              boxShadow: `0 0 30px var(--accent)`
+            }}
           >
             <h1 
-              className="text-3xl sm:text-3xl font-bold text-fuchsia-500"
+              className="text-3xl sm:text-3xl font-bold"
+              style={{ color: 'var(--accent)' }}
             >
               I love you Rapie~ ♥ 
             </h1>
