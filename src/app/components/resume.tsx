@@ -1,113 +1,114 @@
 "use client";
-import { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import gsap from "gsap";
-import { NeonHeader, GlowingCard, CuteDivider, AnimatedSkillBar } from "./ui";
-import { Briefcase, GraduationCap } from "lucide-react";
+import { NeonHeader, GlowingCard, AnimatedSkillBar } from "./ui";
+import { Briefcase, GraduationCap, Sun, Moon } from "lucide-react";
 
-const skills = [
+
+// --- PLACEHOLDER DATA: Replace with your actual information ---
+
+// The Sun's Data
+const sunSkills = [
+  { name: "Placeholder Skill (e.g., React)", percentage: 90 },
+  { name: "Placeholder Skill (e.g., Node.js)", percentage: 85 },
+  { name: "Placeholder Skill (e.g., Python)", percentage: 80 },
+];
+
+const sunExperiences = [
+  { title: "Placeholder Job Title", company: "A Cool Company Inc.", period: "2021 - Present", description: "Describe the role and responsibilities here. What were the key achievements and projects?" },
+];
+
+const sunEducation = [
+  { title: "Placeholder Degree", school: "University of Knowledge", period: "2017 - 2021", description: "Mention any interesting projects or focus areas from your studies." },
+];
+
+// The Moon's Data
+const moonSkills = [
   { name: "D365 F&O Development (X++)", percentage: 95 },
   { name: "SSRS Report Development", percentage: 90 },
-  { name: "Debugging & Code Review", percentage: 90 },
-  { name: "Solution Design & Analysis", percentage: 85 },
-  { name: "Security Role Configuration", percentage: 85 },
   { name: "SQL Server", percentage: 80 },
 ];
 
-const experiences = [
-  { title: "Software Developer", company: "COMM-IT Consultancy Services Sdn. Bhd.", period: "2022 - Present", description: "Developing custom X++ solutions for D365 F&O, designing and customizing SSRS reports, forms, and data entities. Also responsible for configuring security roles and collaborating with analysts to create technical solutions." },
-  { title: "D365 F&O Regional Expansion Project", company: "Goldbell Group (Malaysia)", period: "2023 - 2024", description: "Adapted the Singapore D365 F&O implementation for Malaysia, focusing on adding localized compliance features and customizing SSRS reports and e-invoices for local regulations." },
-  { title: "D365 Business Central Implementation Project", company: "JG Containers (M) Sdn. Bhd.", period: "2024 - Present", description: "Completed technical development training for Business Central and delivered custom reports, enhancing layouts to meet specific client requirements and align with their business processes." },
+const moonExperiences = [
+  { title: "Software Developer", company: "COMM-IT Consultancy", period: "2022 - Present", description: "Developing custom X++ solutions for D365 F&O, designing and customizing SSRS reports, and configuring security roles." },
 ];
 
-const education = [
-  { title: "Bachelor of Electronic Engineering (Computer) with Honours", school: "Universiti Malaysia Sabah (UMS)", period: "2016 - 2020", description: "Final Year Project: IoT-Based Home Surveillance Robotic Vehicle with Cry & Scream Detection." },
+const moonEducation = [
+  { title: "Bachelor of Electronic Engineering (Computer)", school: "Universiti Malaysia Sabah (UMS)", period: "2016 - 2020", description: "Final Year Project: IoT-Based Home Surveillance Robotic Vehicle." },
 ];
+
 
 export default function ResumePage() {
-  const headingRef = useRef<HTMLHeadingElement>(null);
-
-  useEffect(() => {
-    if (headingRef.current) {
-      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=<>?";
-      let frame = 0;
-      const maxFrames = 16;
-      const final_text = "Resume";
-      const interval = setInterval(() => {
-        if (headingRef.current) {
-          if (frame < maxFrames) {
-            headingRef.current.textContent = Array.from(final_text)
-              .map((c) => (c === " " ? " " : chars[Math.floor(Math.random() * chars.length)]))
-              .join("");
-            frame++;
-          } else {
-            headingRef.current.textContent = final_text;
-            clearInterval(interval);
-          }
-        }
-      }, 32);
-
-      gsap.fromTo(
-        headingRef.current,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 1, ease: "power3.out" }
-      );
-    }
-  }, []);
-
   return (
-    <main className="min-h-screen flex justify-center">
-      <div className="space-y-8 max-w-4xl w-full">
-        <div>
-           <NeonHeader text="Experience" />
-          <div className="space-y-4">
-            {experiences.map((exp, idx) => (
-              <motion.div key={idx} className="relative p-6 rounded-lg overflow-hidden" style={{ backgroundColor: `var(--background-light)` }} whileHover={{ scale: 1.02, y: -5 }} transition={{ type: "spring", stiffness: 300 }}>
-                <div className="relative z-10">
-                  <h4 className="text-lg font-bold mb-2" style={{ color: 'var(--accent)' }}>{exp.title}</h4>
-                  <p className="text-sm mb-1 italic" style={{ color: 'var(--foreground)' }}>{exp.company}</p>
-                  <p className="text-sm mb-3" style={{ color: 'var(--foreground-muted)' }}>{exp.period}</p>
-                  <p style={{ color: 'var(--foreground)' }}>{exp.description}</p>
-                </div>
-                <motion.div className="absolute top-3 right-3 text-2xl opacity-20">
-                  <Briefcase style={{ color: 'var(--foreground-muted)' }} />
-                </motion.div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        <CuteDivider />
-
-        <div>
-          <NeonHeader text="Education" />
-          {education.map((edu, idx) => (
-            <motion.div key={idx} className="relative p-6 rounded-lg overflow-hidden" style={{ backgroundColor: `var(--background-light)` }} whileHover={{ scale: 1.02, y: -5 }} transition={{ type: "spring", stiffness: 300 }}>
-              <div className="relative z-10">
-                <h4 className="text-lg font-bold mb-2" style={{ color: 'var(--accent)' }}>{edu.title}</h4>
-                <p className="text-sm mb-1 italic" style={{ color: 'var(--foreground)' }}>{edu.school}</p>
-                <p className="text-sm mb-3" style={{ color: 'var(--foreground-muted)' }}>{edu.period}</p>
-                <p style={{ color: 'var(--foreground)' }}>{edu.description}</p>
-              </div>
-              <motion.div className="absolute top-3 right-3 text-2xl opacity-20">
-                <GraduationCap style={{ color: 'var(--foreground-muted)' }} />
-              </motion.div>
-            </motion.div>
-          ))}
-        </div>
-
-        <CuteDivider />
-
-        <div>
-          <NeonHeader text="My Skills" />
+    <main className="min-h-screen">
+      <NeonHeader text="Our Experience" />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        {/* The Sun's Column */}
+        <div className="space-y-6">
+          <h3 className="text-2xl font-bold text-center flex items-center justify-center gap-2" style={{color: 'var(--accent)'}}><Sun /> The Sun</h3>
           <GlowingCard>
-            <div className="space-y-6">
-              {skills.map((skill, idx) => (
+            <h4 className="text-xl font-bold mb-4 flex items-center gap-2"><Briefcase /> Experience</h4>
+            {sunExperiences.map((exp, idx) => (
+              <div key={idx} className="mb-4">
+                <h5 className="font-bold">{exp.title}</h5>
+                <p className="text-sm italic" style={{color: 'var(--foreground-muted)'}}>{exp.company} | {exp.period}</p>
+                <p className="text-sm mt-1">{exp.description}</p>
+              </div>
+            ))}
+          </GlowingCard>
+          <GlowingCard>
+            <h4 className="text-xl font-bold mb-4 flex items-center gap-2"><GraduationCap /> Education</h4>
+            {sunEducation.map((edu, idx) => (
+               <div key={idx}>
+                <h5 className="font-bold">{edu.title}</h5>
+                <p className="text-sm italic" style={{color: 'var(--foreground-muted)'}}>{edu.school} | {edu.period}</p>
+                <p className="text-sm mt-1">{edu.description}</p>
+              </div>
+            ))}
+          </ GlowingCard>
+          <GlowingCard>
+            <h4 className="text-xl font-bold mb-4">Skills</h4>
+            <div className="space-y-4">
+              {sunSkills.map((skill, idx) => (
                 <AnimatedSkillBar key={idx} name={skill.name} percentage={skill.percentage} />
               ))}
             </div>
           </GlowingCard>
         </div>
+
+        {/* The Moon's Column */}
+        <div className="space-y-6">
+          <h3 className="text-2xl font-bold text-center flex items-center justify-center gap-2" style={{color: 'var(--accent)'}}><Moon /> The Moon</h3>
+           <GlowingCard>
+            <h4 className="text-xl font-bold mb-4 flex items-center gap-2"><Briefcase /> Experience</h4>
+            {moonExperiences.map((exp, idx) => (
+              <div key={idx} className="mb-4">
+                <h5 className="font-bold">{exp.title}</h5>
+                <p className="text-sm italic" style={{color: 'var(--foreground-muted)'}}>{exp.company} | {exp.period}</p>
+                <p className="text-sm mt-1">{exp.description}</p>
+              </div>
+            ))}
+          </GlowingCard>
+          <GlowingCard>
+            <h4 className="text-xl font-bold mb-4 flex items-center gap-2"><GraduationCap /> Education</h4>
+            {moonEducation.map((edu, idx) => (
+               <div key={idx}>
+                <h5 className="font-bold">{edu.title}</h5>
+                <p className="text-sm italic" style={{color: 'var(--foreground-muted)'}}>{edu.school} | {edu.period}</p>
+                <p className="text-sm mt-1">{edu.description}</p>
+              </div>
+            ))}
+          </ GlowingCard>
+          <GlowingCard>
+            <h4 className="text-xl font-bold mb-4">Skills</h4>
+            <div className="space-y-4">
+              {moonSkills.map((skill, idx) => (
+                <AnimatedSkillBar key={idx} name={skill.name} percentage={skill.percentage} />
+              ))}
+            </div>
+          </GlowingCard>
+        </div>
+
       </div>
     </main>
   );
