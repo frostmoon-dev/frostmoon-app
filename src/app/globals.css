@@ -1,29 +1,32 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a192f; /* Deep, cold navy */
-  --background-light: #172a45; /* Lighter navy for cards/sidebar */
-  --foreground: #ccd6f6; /* Pale, soft white for text */
-  --foreground-muted: #8892b0; /* Muted text for secondary info */
-  --accent: #64ffda; /* Icy, vibrant cyan */
-  --accent-secondary: #b8b8f3; /* Soft, magical periwinkle */
+  /* Sun Theme (Light Mode) - Default */
+  --background: #FEFDFB; /* Almost white cream */
+  --background-light: #FFFFFF; /* White */
+  --foreground: #4E342E; /* Dark Brown */
+  --foreground-muted: #795548; /* Lighter Brown */
+  --accent: #FBC02D; /* Golden Sun */
+  --accent-secondary: #FFA726; /* Warm Orange */
+  --accent-rgb: 251, 192, 45;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --background: #f5f7fa; /* Clean, light gray */
-    --background-light: #ffffff; /* Pure white for cards */
-    --foreground: #2e3a59; /* Dark slate blue for text */
-    --foreground-muted: #5a6789; /* Lighter slate blue */
-    --accent: #007bff; /* A sharp, professional blue */
-    --accent-secondary: #7a49ff; /* A vibrant purple */
-  }
+html.dark {
+  /* Moon Theme (Dark Mode) */
+  --background: #010409; /* Midnight Blue */
+  --background-light: #0d1117; /* Deep Indigo */
+  --foreground: #E0E0E0; /* Pale Silver */
+  --foreground-muted: #9E9E9E; /* Light Gray */
+  --accent: #A78BFA; /* Lavender */
+  --accent-secondary: #7C3AED; /* Deep Purple */
+  --accent-rgb: 167, 139, 250;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-jetbrains-mono), monospace;
+  transition: background-color 0.5s ease, color 0.5s ease;
   scroll-behavior: smooth;
 }
 
@@ -40,9 +43,3 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--accent);
   border-radius: 10px;
 }
-
-/* Removing redundant menu CSS that should be in its own file */
-/* I've left the original menu CSS out because it's better to handle it
-   within the Menu component itself to avoid global conflicts.
-   If you have a separate menu.css, you can adjust its variables there.
-   For now, this keeps globals.css clean. */

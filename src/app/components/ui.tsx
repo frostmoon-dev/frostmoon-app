@@ -1,15 +1,33 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { Heart } from "lucide-react";
+
+// Replaced the lucide-react Star icon with an inline SVG component to remove the dependency.
+const Star = ({ size = 20, style = {}, fill = 'currentColor', className = "" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={fill}
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    style={style}
+    className={className}
+  >
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+  </svg>
+);
+
 
 export function NeonHeader({ text }: { text: string }) {
   return (
     <motion.h2
       className="text-3xl font-bold mb-6 text-center"
       style={{
-        color: 'var(--foreground)',
-        textShadow: `0 0 15px var(--accent), 0 0 25px var(--accent)`,
+        color: 'var(--accent)',
       }}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -33,7 +51,7 @@ export function GlowingCard({ children, className = "" }: { children: React.Reac
   );
 }
 
-export function CuteDivider() {
+export function CelestialDivider() {
   return (
     <div className="flex items-center justify-center gap-3 my-8">
       <div
@@ -41,7 +59,7 @@ export function CuteDivider() {
         style={{ background: `linear-gradient(to right, transparent, var(--accent))` }}
       />
       <motion.div animate={{ rotate: 360, scale: [1, 1.2, 1] }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }}>
-        <Heart size={20} style={{ color: 'var(--accent)' }} fill={'var(--accent)'} />
+        <Star size={20} style={{ color: 'var(--accent)' }} fill={'var(--accent)'} />
       </motion.div>
       <div
         className="h-px flex-1"
@@ -96,7 +114,7 @@ export function AnimatedSkillBar({ name, percentage }: { name: string; percentag
         setIsInView(true);
         observer.disconnect();
       }
-    }, { threshold: 0.5 }); // Trigger when 50% of the element is visible
+    }, { threshold: 0.5 });
 
     if (ref.current) observer.observe(ref.current);
     
@@ -125,3 +143,4 @@ export function AnimatedSkillBar({ name, percentage }: { name: string; percentag
     </div>
   );
 }
+
