@@ -1,45 +1,156 @@
 @import "tailwindcss";
 
-:root {
-  /* Sun Theme (Light Mode) - Default */
-  --background: #FEFDFB; /* Almost white cream */
-  --background-light: #FFFFFF; /* White */
-  --foreground: #4E342E; /* Dark Brown */
-  --foreground-muted: #795548; /* Lighter Brown */
-  --accent: #FBC02D; /* Golden Sun */
-  --accent-secondary: #FFA726; /* Warm Orange */
-  --accent-rgb: 251, 192, 45;
+/* --- BB-chan's Hauntingly Cute Fonts ♡ --- */
+
+/* Heading Font: Cormorant Garamond */
+@font-face {
+  font-family: "Cormorant Garamond";
+  src: url("/fonts/cormorant/CormorantGaramond-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  src: url("/fonts/cormorant/CormorantGaramond-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  src: url("/fonts/cormorant/CormorantGaramond-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }
 
-html.dark {
-  /* Moon Theme (Dark Mode) */
-  --background: #010409; /* Midnight Blue */
-  --background-light: #0d1117; /* Deep Indigo */
-  --foreground: #E0E0E0; /* Pale Silver */
-  --foreground-muted: #9E9E9E; /* Light Gray */
-  --accent: #A78BFA; /* Lavender */
-  --accent-secondary: #7C3AED; /* Deep Purple */
-  --accent-rgb: 167, 139, 250;
+/* Body Font: Inter */
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter/Inter-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter/Inter-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter/Inter-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* NEW ACCENT FONT: Amatic SC */
+@font-face {
+  font-family: "Amatic SC";
+  src: url("/fonts/amatic/AmaticSC-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Amatic SC";
+  src: url("/fonts/amatic/AmaticSC-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+@theme {
+  /* Columbina Theme Colors (Unchanged) */
+  --color-primary: #f0f4f8;
+  --color-DarkLava: #1a1a2e;
+  --color-SageGray: #a3b3c9;
+  --color-gold: #b0c4de;
+  --color-text-light: #e0e0e0;
+
+  /* UPDATED FONT VARIABLES! */
+  --font-heading: "Cormorant Garamond", serif;
+  --font-body: "Inter", sans-serif;
+  --font-accent: "Amatic SC", cursive; /* Our new accent font variable! */
+
+  /* Animations (Unchanged) */
+  --animate-marquee: marquee 40s infinite linear;
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  --animate-kenburns: kenburns 30s infinite alternate ease-in-out;
+  @keyframes kenburns {
+    from {
+      transform: scale(1) translate(0, 0);
+      filter: brightness(0.9);
+    }
+    to {
+      transform: scale(1.1) translate(-2%, 2%);
+      filter: brightness(1.1);
+    }
+  }
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-jetbrains-mono), monospace;
-  transition: background-color 0.5s ease, color 0.5s ease;
+  background: var(--color-primary);
+  color: var(--color-DarkLava);
   scroll-behavior: smooth;
+  overflow-x: hidden;
+  font-family: var(--font-body);
+  font-weight: 400;
+  cursor: url("/butterfly.svg"), auto;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-orbitron), sans-serif;
-  color: var(--foreground);
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+@utility clip-path {
+  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
 }
-::-webkit-scrollbar-thumb {
-  background: var(--accent);
-  border-radius: 10px;
+
+@utility banner-text-responsive {
+  @apply text-[68px] sm:text-[118px] md:text-[126px] lg:text-[152px] leading-9 sm:leading-16 lg:leading-20;
+  font-family: var(--font-heading);
+  font-weight: 700;
+}
+
+@utility value-text-responsive {
+  @apply text-3xl md:text-[36px] lg:text-[42px];
+  font-family: var(--font-accent);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.5;
+}
+
+@utility marquee-text-responsive {
+  @apply text-[28px] sm:text-[36px] lg:text-[42px];
+  font-family: var(--font-heading);
+  font-weight: 700;
+}
+
+@utility contact-text-responsive {
+  @apply text-[42px] sm:text-[52px] md:text-[62px] lg:text-[100px];
+  font-family: var(--font-heading);
+  font-weight: 400;
+}
+
+@utility text-glow {
+  @apply drop-shadow-[0_0_12px_var(--color-gold)];
 }
