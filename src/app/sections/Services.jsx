@@ -1,3 +1,4 @@
+"use client";
 import React, { useRef } from "react";
 import AnimatedHeaderSection from "../components/AnimatedHeaderSection";
 import { servicesData } from "../constants";
@@ -34,6 +35,7 @@ const Services = () => {
         scrollTrigger: {
           trigger: triggerRef.current,
           scrub: 1,
+          end: () => "+=" + triggerRef.current.offsetWidth,
         },
       });
 
@@ -58,12 +60,25 @@ const Services = () => {
 
   return (
     <section id="services" ref={sectionRef} className="relative">
-      <AnimatedHeaderSection
-        title="Services"
-        textColor={"text-[var(--color-DarkLava)]"}
-        withScrollTrigger={true}
-      />
-      <div ref={triggerRef} className="h-screen w-full overflow-hidden relative">
+  <div ref={triggerRef} className="h-screen w-full overflow-hidden relative">
+        {/*
+          Here it is, Kouhai. Your "independent" title.
+          No component, just the raw elements, living right here.
+        */}
+        <div className="absolute top-0 left-0 w-full z-30 pointer-events-none flex justify-center pt-20 md:pt-24">
+          <div className="flex flex-col items-center">
+            <h2
+              className="font-['var(--font-heading)'] text-5xl md:text-7xl font-bold text-slate-100 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+            >
+              Services
+            </h2>
+            <div
+              className="w-3/4 md:w-1/2 h-px mt-4 bg-slate-100"
+              style={{ transformOrigin: "center" }}
+            />
+          </div>
+        </div>
+
         <figure className="absolute inset-0 z-0">
           <img
             ref={bgImageRef}
@@ -71,29 +86,26 @@ const Services = () => {
             alt="Ethereal landscape background"
             className="absolute top-0 left-0 w-[150%] max-w-none h-full object-cover"
           />
-          {/* BB-chan's Ultimate Fix: A dark overlay to dominate the bright background! Problem solved. */}
           <div className="absolute inset-0 bg-black/60" />
         </figure>
 
         <div
-          className="flex h-full relative"
+          className="top-[-10] flex h-full relative z-10"
           style={{ width: `${servicesData.length * 100}%` }}
         >
           {servicesData.map((service, index) => (
             <div
               key={index}
-              className="service-panel w-full h-full flex items-center justify-center relative px-10"
+              className="service-panel w-full h-full flex items-center top-[100] justify-center relative px-10"
             >
               <span className="absolute text-[30rem] font-['var(--font-heading)'] font-black text-indigo-200/10 z-0 select-none">
                 0{index + 1}
               </span>
 
               <div className="panel-content text-center z-10 max-w-3xl">
-                {/* Re-calibrated for maximum visual impact. Now it truly glows. */}
-                <h3 className="text-5xl md:text-7xl mb-8 bg-white text-transparent bg-clip-text drop-shadow-[0_0_20px_rgba(232,121,249,0.7)]">
+                <h3 className="text-5xl md:text-7xl mb-8 bg-white text-transparent bg-clip-text drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                   {service.title}
                 </h3>
-                {/* Brighter, crisper, and perfectly readable. As it should be. */}
                 <p className="text-lg md:text-xl text-slate-100 mb-12 font-['var(--font-body)'] leading-relaxed">
                   {service.description}
                 </p>
@@ -101,10 +113,10 @@ const Services = () => {
                   {service.items.map((item, itemIndex) => (
                     <React.Fragment key={itemIndex}>
                       <span>{item.title}</span>
-                      {itemIndex < service.items.length - 1 && (
-                        <span className="font-black text-white-400/80 mx-2">
-                          •
-                        </span>
+                      {itemIndex < service.items.length - 1 && (<div className="w-2 h-2 mx-2 rotate-45 bg-white-400 shadow-[0_0_8px_rgba(0_2px_4px_rgba(0,0,0,0.5)]" />
+                        // <span className="font-black text-white-400/80 mx-2">
+                        //   •
+                        // </span>
                       )}
                     </React.Fragment>
                   ))}
