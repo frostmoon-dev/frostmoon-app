@@ -1,64 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;700&display=swap');
 @import "tailwindcss";
 
 /* --- BB-chan's Hauntingly Cute Fonts ♡ --- */
 
-/* Heading Font: Cormorant Garamond */
+/* Heading Font: Cinzel Decorative */
 @font-face {
-  font-family: "Cormorant Garamond";
-  src: url("/fonts/cormorant/CormorantGaramond-Light.ttf") format("truetype");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Cormorant Garamond";
-  src: url("/fonts/cormorant/CormorantGaramond-Regular.ttf") format("truetype");
+  font-family: "Cinzel Decorative";
+  src: url("/fonts/cinzel-decorative/CinzelDecorative-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Cormorant Garamond";
-  src: url("/fonts/cormorant/CormorantGaramond-Bold.ttf") format("truetype");
+  font-family: "Cinzel Decorative";
+  src: url("/fonts/cinzel-decorative/CinzelDecorative-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
-
-/* Body Font: Inter */
 @font-face {
-  font-family: "Inter";
-  src: url("/fonts/inter/Inter-Light.ttf") format("truetype");
-  font-weight: 300;
+  font-family: "Cinzel Decorative";
+  src: url("/fonts/cinzel-decorative/CinzelDecorative-Black.ttf") format("truetype");
+  font-weight: 900;
   font-style: normal;
   font-display: swap;
 }
+
+/* Handwritten Font: Caveat */
 @font-face {
-  font-family: "Inter";
-  src: url("/fonts/inter/Inter-Regular.ttf") format("truetype");
+  font-family: "Caveat";
+  src: url("/fonts/caveat/Caveat-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Inter";
-  src: url("/fonts/inter/Inter-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* NEW ACCENT FONT: Amatic SC */
-@font-face {
-  font-family: "Amatic SC";
-  src: url("/fonts/amatic/AmaticSC-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Amatic SC";
-  src: url("/fonts/amatic/AmaticSC-Bold.ttf") format("truetype");
+  font-family: "Caveat";
+  src: url("/fonts/caveat/Caveat-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -66,7 +44,7 @@
 
 
 @theme {
-  /* Columbina Theme Colors (Unchanged) */
+  /* Columbina Theme Colors */
   --color-primary: #f0f4f8;
   --color-DarkLava: #1a1a2e;
   --color-SageGray: #a3b3c9;
@@ -74,11 +52,12 @@
   --color-text-light: #e0e0e0;
 
   /* UPDATED FONT VARIABLES! */
-  --font-heading: "Cormorant Garamond", serif;
-  --font-body: "Inter", sans-serif;
-  --font-accent: "Amatic SC", cursive; /* Our new accent font variable! */
+  --font-heading: "Cinzel Decorative";
+  --font-body: "Quicksand";
+  --font-accent: "Quicksand";
+  --font-handwritten: "Quicksand";
 
-  /* Animations (Unchanged) */
+  /* Animations */
   --animate-marquee: marquee 40s infinite linear;
   @keyframes marquee {
     from {
@@ -126,17 +105,21 @@ h6 {
 }
 
 @utility banner-text-responsive {
-  @apply text-[68px] sm:text-[118px] md:text-[126px] lg:text-[152px] leading-9 sm:leading-16 lg:leading-20;
+  @apply text-[35px] sm:text-[118px] md:text-[126px] lg:text-[100px] leading-tight;
   font-family: var(--font-heading);
-  font-weight: 700;
+  font-weight: 900;
+}
+
+@utility subtitle-text-responsive {
+  @apply text-xl md:text-2xl;
 }
 
 @utility value-text-responsive {
-  @apply text-3xl md:text-[36px] lg:text-[42px];
+  @apply text-xl md:text-2xl;
   font-family: var(--font-accent);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  line-height: 1.6;
 }
 
 @utility marquee-text-responsive {

@@ -3,6 +3,9 @@ import AnimatedHeaderSection from "../components/AnimatedHeaderSection";
 import { AnimatedTextLines } from "../components/AnimatedTextLines";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const About = () => {
   const text = `From intricate systems to captivating interfaces,
@@ -14,33 +17,52 @@ When the moon is high and the code is at rest, you'll find me:
 🕯️ Cultivating an aesthetic of understated, ethereal beauty.
 ☕ Fueled by midnight brews and the quiet hum of contemplation.
 🖤 Embracing the silent companionship of my shadowy familiar.`;
-  const imgRef = useRef(null);
+  
+  const sectionRef = useRef(null);
+  const imgContainerRef = useRef(null);
+  
   useGSAP(() => {
-    gsap.to("#about", {
+    // Existing scale-down animation for the whole section
+    gsap.to(sectionRef.current, {
       scale: 0.95,
       scrollTrigger: {
-        trigger: "#about",
+        trigger: sectionRef.current,
         start: "bottom 80%",
         end: "bottom 20%",
         scrub: true,
-        markers: false,
       },
       ease: "power1.inOut",
     });
 
-    gsap.set(imgRef.current, {
-      clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0% 100%)",
-    });
-    gsap.to(imgRef.current, {
-      clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-      duration: 2,
+    // Existing clip-path reveal for the image
+    gsap.from(imgContainerRef.current, {
+      clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
+      duration: 1.5,
       ease: "power4.out",
-      scrollTrigger: { trigger: imgRef.current },
+      scrollTrigger: { 
+        trigger: imgContainerRef.current,
+        start: "top 80%",
+      },
     });
+    
+    // New parallax animation for the image container!
+    gsap.to(imgContainerRef.current, {
+      yPercent: -15, // Move the image up as we scroll down
+      ease: "none",
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true,
+      },
+    });
+
   }, []);
+
   return (
     <section
       id="about"
+      ref={sectionRef}
       className="min-h-screen bg-[var(--color-DarkLava)] rounded-b-4xl"
     >
       <AnimatedHeaderSection
@@ -50,14 +72,25 @@ When the moon is high and the code is at rest, you'll find me:
         textColor={"text-[var(--color-text-light)]"}
         withScrollTrigger={true}
       />
-      <div className="flex flex-col items-center justify-between gap-16 px-10 pb-16 text-xl font-light tracking-wide lg:flex-row md:text-2xl lg:text-3xl text-[var(--color-SageGray)]">
-        <img
-          ref={imgRef}
-          src="images/avatar.png"
-          alt="A mysterious avatar"
-          className="w-md rounded-3xl"
-        />
-        <AnimatedTextLines text={aboutText} className={"w-full"} />
+      {/* New layout using CSS Grid for more control */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-16 px-10 pb-16 text-[var(--color-SageGray)]">
+        
+        {/* The new Crystalline Frame for your image */}
+        <div ref={imgContainerRef} className="relative image-frame">
+          <div className="image-frame-corner image-frame-top-left"></div>
+          <div className="image-frame-corner image-frame-top-right"></div>
+          <img
+            src="images/avatar.png"
+            alt="A mysterious avatar"
+            className="w-full"
+          />
+          <div className="image-frame-corner image-frame-bottom-left"></div>
+          <div className="image-frame-corner image-frame-bottom-right"></div>
+        </div>
+
+        <div className="text-xl font-light tracking-wide md:text-2xl lg:text-3xl">
+          <AnimatedTextLines text={aboutText} className={"w-full"} />
+        </div>
       </div>
     </section>
   );

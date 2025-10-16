@@ -2,10 +2,11 @@ import React from "react";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { AnimatedTextLines } from "./AnimatedTextLines"; // Add this missing import!
 
 const AnimatedHeaderSection = ({
-  subTitle = "", // Default to an empty string if not provided
-  title = "",    // Default to an empty string if not provided
+  subTitle = "",
+  title = "",
   text,
   textColor,
   withScrollTrigger = false,
@@ -32,7 +33,7 @@ const AnimatedHeaderSection = ({
         ease: "power3.out",
       });
 
-      if (subTitleChars.length) { // Only animate if there are characters
+      if (subTitleChars.length) {
         tl.from(
           subTitleChars,
           {
@@ -49,8 +50,8 @@ const AnimatedHeaderSection = ({
           "-=0.5"
         );
       }
-      
-      if (titleChars.length) { // Only animate if there are characters
+
+      if (titleChars.length) {
         tl.from(
           titleChars,
           {
@@ -75,7 +76,7 @@ const AnimatedHeaderSection = ({
     <div ref={contextRef}>
       <div className="flex flex-col items-center justify-center gap-12 pt-16 sm:gap-16">
         <p
-          className={`text-3xl text-center tracking-[0.2em] px-10 ${textColor} font-['var(--font-accent)']`}
+          className={`text-center tracking-wider px-10 ${textColor} font-['var(--font-accent)'] subtitle-text-responsive`}
         >
           {subTitle.split("").map((char, index) => (
             <span
@@ -92,7 +93,7 @@ const AnimatedHeaderSection = ({
             className={`
               relative inline-block pb-4 
               after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-[var(--color-text-light)]
-              gap-12 uppercase banner-text-responsive sm:gap-16 ${textColor} text-glow
+              gap-12 banner-text-responsive sm:gap-16 ${textColor} text-glow
             `}
           >
             {title.split("").map((char, index) => (
@@ -112,7 +113,10 @@ const AnimatedHeaderSection = ({
         <div className={`relative px-10 ${textColor}`}>
           <div className="absolute inset-x-0 border-t-2 border-[var(--color-SageGray)]" />
           <div className="py-12 sm:py-16 text-center">
-            {/* This space is intentionally left for other pages */}
+            <AnimatedTextLines
+              text={text}
+              className={`value-text-responsive ${textColor}`}
+            />
           </div>
         </div>
       )}

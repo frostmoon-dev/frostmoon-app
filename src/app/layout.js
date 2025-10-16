@@ -1,7 +1,7 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Frostmoon - A Developer's Portfolio",
+  title: "frostmoon",
   description:
     "A developer's portfolio with the haunting elegance of Columbina from Genshin Impact.",
 };

@@ -56,7 +56,7 @@ export const projects = [
 ];
 
 export const socials = [
-    { name: "GitHub", href: "#" },
-    { name: "LinkedIn", href: "#" },
+    { name: "GitHub", href: "https://github.com/frostmoon-dev" },
+    { name: "LinkedIn", href: "https://www.linkedin.com/in/fatihahmuhd/" },
     { name: "Twitter", href: "#" },
 ];

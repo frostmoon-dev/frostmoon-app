@@ -22,6 +22,7 @@ const Hero = () => {
     });
   }, []);
 
+  // Particle options are now dynamic based on screen size!
   const particleOptions = useMemo(
     () => ({
       fullScreen: { enable: false },
@@ -34,7 +35,7 @@ const Hero = () => {
       interactivity: {
         events: {
           onHover: {
-            enable: true,
+            enable: !isMobile, // Disable hover interaction on mobile
             mode: "repulse",
           },
         },
@@ -70,7 +71,7 @@ const Hero = () => {
             enable: true,
             area: 800,
           },
-          value: 50,
+          value: isMobile ? 20 : 50, // Fewer particles on mobile!
         },
         opacity: {
           value: { min: 0.1, max: 0.5 },
@@ -89,7 +90,7 @@ const Hero = () => {
       },
       detectRetina: true,
     }),
-    []
+    [isMobile] // Re-calculate options if isMobile changes
   );
 
   useGSAP(() => {
@@ -123,12 +124,12 @@ const Hero = () => {
     <section
       id="home"
       ref={heroRef}
-      className="flex flex-col justify-center items-center min-h-screen"
+      className="flex flex-col items-center justify-center min-h-screen"
     >
-      <div ref={textContainerRef} className="z-10">
+      <div ref={textContainerRef} className="z-10 w-full">
         <AnimatedHeaderSection
           subTitle={"Bene venisti ad opera mea"}
-          title={"FROSTMOON"}
+          title={"FROSTMOON.DEV"}
           textColor={"text-[var(--color-text-light)]"}
         />
       </div>

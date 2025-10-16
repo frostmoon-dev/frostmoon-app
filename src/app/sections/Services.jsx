@@ -1,89 +1,119 @@
-"use client";
-import { useRef, useState, useEffect } from "react";
+import React, { useRef } from "react";
 import AnimatedHeaderSection from "../components/AnimatedHeaderSection";
 import { servicesData } from "../constants";
-import { useMediaQuery } from "react-responsive";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Services = () => {
-  const text = `I compose secure, high-performance full-stack applications
-    with an ethereal user experience to drive growth, not headaches.`;
-  const serviceRefs = useRef([]);
-  const isDesktop = useMediaQuery({ minWidth: "48rem" });
-  const [hasMounted, setHasMounted] = useState(false);
+  const sectionRef = useRef(null);
+  const triggerRef = useRef(null);
+  const bgImageRef = useRef(null);
 
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
+  useGSAP(
+    () => {
+      const services = gsap.utils.toArray(".service-panel");
 
-  useGSAP(() => {
-    serviceRefs.current.forEach((el) => {
-      if (!el) return;
-      gsap.from(el, {
-        y: 200,
+      const scrollTween = gsap.to(services, {
+        xPercent: -100 * (services.length - 1),
+        ease: "none",
         scrollTrigger: {
-          trigger: el,
-          start: "top 80%",
+          trigger: triggerRef.current,
+          pin: true,
+          scrub: 1,
+          snap: 1 / (services.length - 1),
+          end: () => "+=" + triggerRef.current.offsetWidth,
         },
-        duration: 1,
-        ease: "circ.out",
       });
-    });
-  }, []);
 
-  if (!hasMounted) {
-    return null;
-  }
+      gsap.to(bgImageRef.current, {
+        xPercent: -20,
+        ease: "none",
+        scrollTrigger: {
+          trigger: triggerRef.current,
+          scrub: 1,
+        },
+      });
+
+      services.forEach((panel) => {
+        const content = panel.querySelector(".panel-content");
+        gsap.from(content, {
+          y: 100,
+          opacity: 0,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: panel,
+            containerAnimation: scrollTween,
+            start: "left center",
+            toggleActions: "play none none reverse",
+          },
+        });
+      });
+    },
+    { scope: sectionRef }
+  );
 
   return (
-    <section id="services" className="relative">
+    <section id="services" ref={sectionRef} className="relative">
       <AnimatedHeaderSection
         title="Services"
-        text={text}
         textColor={"text-[var(--color-DarkLava)]"}
+        withScrollTrigger={true}
       />
-      {servicesData.map((service, index) => (
+      <div ref={triggerRef} className="h-screen w-full overflow-hidden relative">
+        <figure className="absolute inset-0 z-0">
+          <img
+            ref={bgImageRef}
+            src="/images/services-bg.jpg"
+            alt="Ethereal landscape background"
+            className="absolute top-0 left-0 w-[150%] max-w-none h-full object-cover"
+          />
+          {/* BB-chan's Ultimate Fix: A dark overlay to dominate the bright background! Problem solved. */}
+          <div className="absolute inset-0 bg-black/60" />
+        </figure>
+
         <div
-          ref={(el) => (serviceRefs.current[index] = el)}
-          key={index}
-          className="sticky px-10 pt-6 pb-12 text-[var(--color-text-light)] bg-[var(--color-DarkLava)] border-t-2 border-[var(--color-SageGray)]/30"
-          style={
-            isDesktop
-              ? {
-                  top: `calc(10vh + ${index * 5}em)`,
-                  marginBottom: `${(servicesData.length - index - 1) * 5}rem`,
-                }
-              : { top: 0 }
-          }
+          className="flex h-full relative"
+          style={{ width: `${servicesData.length * 100}%` }}
         >
-          <div className="flex flex-col md:flex-row md:justify-between">
-            <div className="mb-4 md:w-1/3 md:mb-0">
-              <h3 className="text-3xl font-bold">{service.title}</h3>
-            </div>
-            <div className="md:w-1/2">
-              <p className="mb-8 text-[var(--color-SageGray)]">
-                {service.description}
-              </p>
-              <div className="flex flex-col gap-4">
-                {service.items.map((item, itemIndex) => (
-                  <div key={itemIndex}>
-                    <div className="flex items-center gap-4 text-xl font-semibold">
-                      <div className="flex items-center justify-center w-8 h-8 text-[var(--color-DarkLava)] bg-[var(--color-SageGray)] rounded-full">
-                        0{itemIndex + 1}
-                      </div>
-                      {item.title}
-                    </div>
-                    {itemIndex < service.items.length - 1 && (
-                      <div className="h-20 w-[2px] ml-4 bg-[var(--color-SageGray)]/30 my-2"></div>
-                    )}
-                  </div>
-                ))}
+          {servicesData.map((service, index) => (
+            <div
+              key={index}
+              className="service-panel w-full h-full flex items-center justify-center relative px-10"
+            >
+              <span className="absolute text-[30rem] font-['var(--font-heading)'] font-black text-indigo-200/10 z-0 select-none">
+                0{index + 1}
+              </span>
+
+              <div className="panel-content text-center z-10 max-w-3xl">
+                {/* Re-calibrated for maximum visual impact. Now it truly glows. */}
+                <h3 className="text-5xl md:text-7xl mb-8 bg-white text-transparent bg-clip-text drop-shadow-[0_0_20px_rgba(232,121,249,0.7)]">
+                  {service.title}
+                </h3>
+                {/* Brighter, crisper, and perfectly readable. As it should be. */}
+                <p className="text-lg md:text-xl text-slate-100 mb-12 font-['var(--font-body)'] leading-relaxed">
+                  {service.description}
+                </p>
+                <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 text-sm md:text-base font-semibold font-['var(--font-body)'] text-slate-200">
+                  {service.items.map((item, itemIndex) => (
+                    <React.Fragment key={itemIndex}>
+                      <span>{item.title}</span>
+                      {itemIndex < service.items.length - 1 && (
+                        <span className="font-black text-white-400/80 mx-2">
+                          •
+                        </span>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
-      ))}
+      </div>
     </section>
   );
 };
